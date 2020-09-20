@@ -30,23 +30,28 @@ class HostIdFilterCommand(EventingCommand):
         **Description:** Use space separated field=val filter.
         ''')
 
+    HOST_URL = '/rest/appliances/host_id_alerts/'
+
+    def __init__(self):
+        super(HostIdFilterCommand, self).__init__()
+        self.ips_list = None
+
     def transform(self, records):
         if not self.filter:
             for record in records:
                 yield record
             return
 
-        HOST_URL = '/rest/appliances/host_id_alerts/'
-        snc = StamusRestConnection()
-        # Do search
-        filters = StamusHostIdFilters(self.filter).get()
-        resp = snc.get(HOST_URL, params = filters)
-        data = resp.get('results', [])
-
-        ips_list = [host['ip'] for host in data]
+        if self.ips_list is None:
+            snc = StamusRestConnection()
+            # Do search
+            filters = StamusHostIdFilters(self.filter).get()
+            resp = snc.get(self.HOST_URL, params = filters)
+            data = resp.get('results', [])
+            self.ips_list = [host['ip'] for host in data]
 
         for record in records:
-            if record.get('src_ip') in ips_list or record.get('dest_ip') in ips_list:
+            if record.get('src_ip') in self.ips_list or record.get('dest_ip') in self.ips_list:
                 yield record
         return
 
