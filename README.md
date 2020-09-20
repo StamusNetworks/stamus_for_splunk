@@ -27,3 +27,9 @@ To select following a filter:
 | hostidsearch filter="hostname.host=zopenret.top services.port=443"
 ```
 
+Select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
+
+```
+event_type="alert" | hostidfilter filter="services.port=443"
+```
+
