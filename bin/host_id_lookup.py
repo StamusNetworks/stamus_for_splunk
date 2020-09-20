@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-import requests
 import csv
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
 
-from stamus import StamusRestConnection
+from lib.stamus.common import StamusRestConnection
+
 
 def hostid_lookup_hostname(hostname):
     snc = StamusRestConnection()
@@ -29,6 +29,7 @@ def hostid_lookup_ip(ip):
     for host in data:
         hostnames.append(host['host'])
     return hostnames
+
 
 def main():
     if len(sys.argv) != 3:

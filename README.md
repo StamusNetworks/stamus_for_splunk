@@ -14,3 +14,16 @@ check_tls = no
 ```
 
 ## Usage
+
+To retrieve all Host ID entries
+
+```
+| hostidsearch
+```
+
+To select following a filter:
+
+```
+| hostidsearch filter="hostname.host=zopenret.top services.port=443"
+```
+

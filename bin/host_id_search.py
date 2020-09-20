@@ -4,13 +4,12 @@ import sys
 import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
+
 from splunklib.searchcommands import \
     dispatch, GeneratingCommand, Configuration, Option, validators
 
-from stamus import StamusRestConnection
+from lib.stamus.common import StamusRestConnection, StamusHostIdFilters
 
-HOST_URL = '/rest/appliances/host_id_alerts/'
 
 @Configuration(type='events')
 class HostIDSearchCommand(GeneratingCommand):
@@ -20,11 +19,16 @@ class HostIDSearchCommand(GeneratingCommand):
     ##Description
     %(description)
     """
-    
+    filter = Option(require=False)
+
     def generate(self):
+        HOST_URL = '/rest/appliances/host_id_alerts/'
         snc = StamusRestConnection()
         # Do search
-        resp = snc.get(HOST_URL)
+        filters = None
+        if self.filter:
+            filters = StamusHostIdFilters(self.filter).get()
+        resp = snc.get(HOST_URL, params = filters)
         data = resp.get('results', [])
         for host in data:
             host['host_id']['ip'] = host['ip']
