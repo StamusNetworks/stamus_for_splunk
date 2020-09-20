@@ -3,21 +3,17 @@
 import requests
 import csv
 import sys
+import os
 
-APIKey = '7909d2b1557fd7a99b999360bc79ddb418f69e27'
-BASE_URL = 'https://10.136.0.14'
-CHECK_TLS = False
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
 
-headers = { 'Content-Type': 'application/json', 'Authorization': 'Token ' + APIKey }
+from stamus import StamusRestConnection
 
 def hostid_lookup_hostname(hostname):
+    snc = StamusRestConnection()
     HOST_URL = '/rest/appliances/host_id_alerts/?host_id_qfilter=' + hostname
-    DIRECT_URL = BASE_URL + HOST_URL
-    resp = requests.get(DIRECT_URL, headers=headers, verify=CHECK_TLS)
-    if resp.status_code != 200:
-        # This means something went wrong.
-        print('not godo')
-    data = resp.json().get('results', [])
+    resp = snc.get(HOST_URL)
+    data = resp.get('results', [])
     ips = []
     for host in data:
         ips.append(host['ip'])
@@ -25,13 +21,10 @@ def hostid_lookup_hostname(hostname):
 
 
 def hostid_lookup_ip(ip):
+    snc = StamusRestConnection()
     IP_URL = "/rest/appliances/host_id/" + ip
-    DIRECT_URL = BASE_URL + IP_URL
-    resp = requests.get(DIRECT_URL, headers=headers, verify=CHECK_TLS)
-    if resp.status_code != 200:
-        # This means something went wrong.
-        print('not good')
-    data = resp.json().get('host_id', {}).get('hostname')
+    resp = snc.get(IP_URL)
+    data = resp.get('host_id', {}).get('hostname')
     hostnames = []
     for host in data:
         hostnames.append(host['host'])
