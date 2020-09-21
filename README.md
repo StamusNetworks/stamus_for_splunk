@@ -65,3 +65,25 @@ List all Stamus offenders and resolve IP to name using host ID data:
 ```
 event_type="stamus"| lookup hostidlookup ip as stamus.source| top stamus.source, hostname
 ```
+
+Get all Stamus Threats, then resolve asset IP to name and display threat per asset statistics:
+
+```
+event_type="threat" | lookup hostidlookup ip as asset | stats min(timestamp), max(timestamp) by threat, asset, hostname
+```
+
+
+Display all Stamus Threats events and output a table where asset IP has been resolved to name:
+
+```
+event_type="stamus" | lookup hostidlookup ip as stamus.asset | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.threat_id, stamus.asset, stamus.asset_net_info, hostname
+```
+
+### Thread ID lookup
+
+
+### MISC
+
+```
+event_type="stamus" | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, stamus.threat_id | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, stamus.threat_id | table _time, stamus.asset, stamus.threat_id, duration
+```

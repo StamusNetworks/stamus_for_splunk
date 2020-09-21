@@ -109,7 +109,7 @@
       <title>Assets under Attack by Network</title>
       <chart>
         <search>
-          <query>event_type="stamus" | stats dc(stamus.asset) as "Unique Asset(s)" count by stamus.asset_net_info | rename stamus.asset_net_info as Network | sort 5 -"Unique Asset(s)" | table Network "Unique Asset(s)"</query>
+          <query>event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as "Unique Asset(s)" count by Network | sort 5 -"Unique Asset(s)" | table Network "Unique Asset(s)"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -158,35 +158,6 @@
   </row>
   <row>
     <panel>
-      <title>Top Hostnames in Alert events</title>
-      <chart>
-        <search>
-          <query>event_type=alert |top 20 hostname_info.host | search count&gt;5</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-        </search>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">0</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-        <option name="refresh.display">progressbar</option>
-      </chart>
-    </panel>
-    <panel>
       <title>Alerts Count by Country</title>
       <map>
         <search>
@@ -222,6 +193,37 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Hostnames in Alert events</title>
+      <chart>
+        <search>
+          <query>event_type=alert |top 20 hostname_info.host | search count&gt;5</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
     </panel>
     <panel>
       <title>Top Domains by Unique Signature</title>
@@ -265,6 +267,25 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </chart>
+    </panel>
+    <panel>
+      <title>Alerts on Recent Signatures</title>
+      <table>
+        <search>
+          <query>event_type=alert | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
     </panel>
   </row>
   <row>
