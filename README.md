@@ -15,6 +15,8 @@ check_tls = no
 
 ## Usage
 
+### Host ID search
+
 To retrieve all Host ID entries
 
 ```
@@ -27,9 +29,39 @@ To select following a filter:
 | hostidsearch filter="hostname.host=zopenret.top services.port=443"
 ```
 
+Get a top of hostname (by count of IP) running a service on port 443 and in network `internet`:
+```
+| hostidsearch filter="services.port=443 net_info.agg=internet"| spath "hostname{}.host" | top "hostname{}.host"
+```
+
+Get software version of all HTTP server in a network:
+
+```
+| hostidsearch filter="services.port=80 net_info.agg=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"
+```
+
+
+### Host ID filter
+
 Select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
+
+The following search get all alerts for host running a service on port 443.
 
 ```
 event_type="alert" | hostidfilter filter="services.port=443"
 ```
 
+### Host ID lookup
+
+
+The following search gets all Stamus event and resolve destination ip to hostname.
+
+```
+event_type="stamus"| lookup hostidlookup ip as dest_ip| stats count by hostname
+```
+
+List all Stamus offenders and resolve IP to name using host ID data:
+
+```
+event_type="stamus"| lookup hostidlookup ip as stamus.source| top stamus.source, hostname
+```
