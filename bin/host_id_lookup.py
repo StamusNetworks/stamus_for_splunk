@@ -4,8 +4,6 @@ import csv
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
-
 from lib.stamus.common import StamusRestConnection
 
 
