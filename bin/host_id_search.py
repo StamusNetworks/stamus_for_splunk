@@ -2,6 +2,7 @@
 
 import sys
 import os
+import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
 
@@ -32,7 +33,7 @@ class HostIDSearchCommand(GeneratingCommand):
         data = resp.get('results', [])
         for host in data:
             host['host_id']['ip'] = host['ip']
-            yield(host['host_id'])       
+            yield({'_raw': json.dumps(host['host_id'])})
         pass
 
 dispatch(HostIDSearchCommand, sys.argv, sys.stdin, sys.stdout, __name__)
