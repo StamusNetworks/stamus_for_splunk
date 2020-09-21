@@ -13,6 +13,8 @@ def hostid_lookup_hostname(hostname):
     resp = snc.get(HOST_URL)
     data = resp.get('results', [])
     ips = []
+    if data is None:
+        return []
     for host in data:
         ips.append(host['ip'])
     return ips
@@ -24,6 +26,8 @@ def hostid_lookup_ip(ip):
     resp = snc.get(IP_URL)
     data = resp.get('host_id', {}).get('hostname')
     hostnames = []
+    if data is None:
+        return [ip]
     for host in data:
         hostnames.append(host['host'])
     return hostnames
