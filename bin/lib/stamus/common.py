@@ -33,6 +33,12 @@ class StamusHostIdFilters(object):
         self.filters = [x.replace('=', ':', 1) for x in filters_list]
 
     def get(self):
-        prefixed_filters = ['host_id.' + x for x in self.filters]
+        prefixed_filters = []
+        for filt in self.filters:
+            if filt.startswith('ip:'):
+                prefixed_filters.append(filt)
+            else:
+                prefixed_filters.append('host_id.' + filt)
+
         str_filters = ' AND '.join(prefixed_filters)
         return { self.FILTER_PREFIX: str_filters }
