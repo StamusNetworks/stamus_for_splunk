@@ -39,15 +39,21 @@ class StamusHostIdFilters(object):
                     filters_list.remove(filt)
                     filters_list.append(frep)
                     break
-        self.filters = [x.replace('=', ':', 1) for x in filters_list]
-
-    def get(self):
         prefixed_filters = []
-        for filt in self.filters:
-            if filt.startswith('ip:'):
+        for filt in filters_list:
+            if filt.startswith('ip'):
                 prefixed_filters.append(filt)
             else:
                 prefixed_filters.append('host_id.' + filt)
+        self.filters = []
+        for filt in prefixed_filters:
+            if '!' in filt:
+                if filt.index('!') + 1 == filt.index('='):
+                    ress = 'NOT ' + filt.replace('!=', ':', 1)
+                    self.filters.append(ress)
+                    continue
+            self.filters.append(filt.replace('=', ':', 1))
 
-        str_filters = ' AND '.join(prefixed_filters)
+    def get(self):
+        str_filters = ' AND '.join(self.filters)
         return { self.FILTER_PREFIX: str_filters }
