@@ -180,5 +180,21 @@
         <option name="trellis.size">medium</option>
       </chart>
     </panel>
+    <panel>
+      <title>HTTP Servers not running on port 80</title>
+      <table>
+        <search ref="HTTP Servers not running on port 80"></search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>TLS servers not running on port 443</title>
+      <table>
+        <search ref="TLS servers not running on port 443"></search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
   </row>
 </form>
