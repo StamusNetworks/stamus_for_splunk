@@ -5,6 +5,8 @@ import re
 from splunk.clilib import cli_common as cli
 
 
+FIELDS_SUBSTITUTION = (['http.user_agent', 'http_user_agent'], ['http.user_agent_count', 'http_user_agent_count'], ['tls.ja3', 'tls_ja3'], ['tls.ja3_count', 'tls_ja3_count'])
+
 class StamusRestConnection(object):
     def __init__(self):
         cfg = cli.getConfStanza('ssp', 'config')
@@ -30,6 +32,13 @@ class StamusHostIdFilters(object):
     FILTER_PREFIX = 'host_id_qfilter'
     def __init__(self, filters):
         filters_list = re.split(' +', filters)
+        for filt in filters_list:
+            for item in FIELDS_SUBSTITUTION:
+                if filt.startswith(item[1] + '.') or filt.startswith(item[1] + '='):
+                    frep = filt.replace('_','.',1)
+                    filters_list.remove(filt)
+                    filters_list.append(frep)
+                    break
         self.filters = [x.replace('=', ':', 1) for x in filters_list]
 
     def get(self):

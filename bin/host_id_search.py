@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
 from splunklib.searchcommands import \
     dispatch, GeneratingCommand, Configuration, Option, validators
 
-from lib.stamus.common import StamusRestConnection, StamusHostIdFilters
+from lib.stamus.common import StamusRestConnection, StamusHostIdFilters, FIELDS_SUBSTITUTION
 
 
 @Configuration(type='events')
@@ -32,8 +32,12 @@ class HostIDSearchCommand(GeneratingCommand):
         resp = snc.get(HOST_URL, params = filters)
         data = resp.get('results', [])
         for host in data:
-            host['host_id']['ip'] = host['ip']
-            yield({'_raw': json.dumps(host['host_id'])})
+            host_data = host['host_id']
+            host_data['ip'] = host['ip']
+            for field in FIELDS_SUBSTITUTION:
+                if host_data.get(field[0]):
+                    host_data[field[1]] = host_data.pop(field[0])
+            yield({'_raw': json.dumps(host_data)})
         pass
 
 dispatch(HostIDSearchCommand, sys.argv, sys.stdin, sys.stdout, __name__)
