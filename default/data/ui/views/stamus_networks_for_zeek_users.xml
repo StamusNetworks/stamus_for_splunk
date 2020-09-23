@@ -1,5 +1,5 @@
 <form>
-  <label>Stamus Networks for Zeek Users</label>
+  <label>Stamus Networks NTA Dashboard</label>
   <description>NSM Dashboard for Scirius Security Platform</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">

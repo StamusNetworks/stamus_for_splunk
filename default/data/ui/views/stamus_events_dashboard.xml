@@ -269,7 +269,7 @@
       </chart>
     </panel>
     <panel>
-      <title>Alerts on Recent Signatures</title>
+      <title>Alerts on Signatures that are less than 1 month old</title>
       <table>
         <search>
           <query>event_type=alert | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
