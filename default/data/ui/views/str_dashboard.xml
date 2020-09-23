@@ -22,7 +22,7 @@
       <title>Distribution by Kill Chain Phase</title>
       <chart>
         <search>
-          <query>event_type="stamus" | stats dc(stamus.asset) count by stamus.kill_chain | table stamus.kill_chain count</query>
+          <query>event_type="stamus" | stats dc(stamus.asset) count by stamus.kill_chain</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -124,7 +124,7 @@
       <title>Assets Timeline</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>event_type="stamus" | stamusthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | table _time, stamus.asset, threat_name, duration</query>
+          <query>event_type="stamus" | stamusthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup hostidlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

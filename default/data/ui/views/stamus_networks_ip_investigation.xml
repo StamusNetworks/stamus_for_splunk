@@ -18,7 +18,7 @@
       <title>Global Information</title>
       <single>
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath | spath "net_info{0}.agg" | eval Network = if('net_info{0}.agg' == "" , "Unknown", 'net_info{0}.agg')  | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval "First Seen"=strftime(iso8601_start, "%Y-%m-%d") | eval "Last Seen"=strftime(iso8601_end, "%Y-%m-%d") | rename services_count as "Service(s)" | rename http_user_agent_count as "HTTP User Agent(s)" | rename tls_ja3_count as "TLS Agent(s)" | rename username_count as "User(s)" | rename hostname_count as "Hostname(s)" | table  Network  "Hostname(s)" "Service(s)" "User(s)" "HTTP User Agent(s)" "TLS Agent(s)"  "First Seen" "Last Seen"</query>
+          <query>| hostidsearch filter="ip=$src$" | spath | spath "net_info{0}.agg" | eval Network = if('net_info{0}.agg' == "" , "Unknown", 'net_info{0}.agg')  | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval "First Seen"=tostring(round(now() - iso8601_start, 0), "duration") + " ago" | eval "Last Seen"= tostring(round(now() - iso8601_end, 0), "duration") + " ago" | rename services_count as "Service(s)" | rename http_user_agent_count as "HTTP User Agent(s)" | rename tls_ja3_count as "TLS Agent(s)" | rename username_count as "User(s)" | rename hostname_count as "Hostname(s)" | table  Network  "Hostname(s)" "Service(s)" "User(s)" "HTTP User Agent(s)" "TLS Agent(s)"  "First Seen" "Last Seen"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -55,6 +55,13 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="timeline_app.timeline.axisTimeFormat">SECONDS</option>
+        <option name="timeline_app.timeline.colorMode">categorical</option>
+        <option name="timeline_app.timeline.maxColor">#DA5C5C</option>
+        <option name="timeline_app.timeline.minColor">#FFE8E8</option>
+        <option name="timeline_app.timeline.numOfBins">6</option>
+        <option name="timeline_app.timeline.tooltipTimeFormat">DAYS</option>
+        <option name="timeline_app.timeline.useColors">0</option>
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
