@@ -34,12 +34,17 @@ Get a top of hostname (by count of IP) running a service on port 443 and in netw
 | hostidsearch filter="services.port=443 net_info.agg=internet"| spath "hostname{}.host" | top "hostname{}.host"
 ```
 
-Get software version of all HTTP server in a network:
+Get software version of all HTTP server in a network (here `internet`):
 
 ```
-| hostidsearch filter="services.port=80 net_info.agg=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"
+| hostidsearch filter="services.values.app_proto=http net_info.agg=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"
 ```
 
+Get all host that are not running a version curl:
+
+```
+| hostidsearch filter="http_user_agent.agent!=curl*" | spath http_user_agent{}.agent output=agent | top agent
+```
 
 ### Host ID filter
 
@@ -81,6 +86,12 @@ event_type="stamus" | lookup hostidlookup ip as stamus.asset | stats min(timesta
 
 ### Thread ID lookup
 
+
+Get threat by network and use `stamusthreatfilter` to do `threat_id` resolution:
+
+```
+event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stamusthreatfilter | stats dc(stamus.asset) as Assets by Network, threat_name
+```
 
 ### MISC
 
