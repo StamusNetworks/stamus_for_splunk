@@ -30,14 +30,16 @@ class HostIDSearchCommand(GeneratingCommand):
         if self.filter:
             filters = StamusHostIdFilters(self.filter).get()
         resp = snc.get(HOST_URL, params = filters)
-        data = resp.get('results', [])
-        for host in data:
-            host_data = host['host_id']
-            host_data['ip'] = host['ip']
-            for field in FIELDS_SUBSTITUTION:
-                if host_data.get(field[0]):
-                    host_data[field[1]] = host_data.pop(field[0])
-            yield({'_raw': json.dumps(host_data)})
+        while resp:
+            data = resp.get('results', [])
+            for host in data:
+                host_data = host['host_id']
+                host_data['ip'] = host['ip']
+                for field in FIELDS_SUBSTITUTION:
+                    if host_data.get(field[0]):
+                        host_data[field[1]] = host_data.pop(field[0])
+                yield({'_raw': json.dumps(host_data)})
+            resp = snc.get(HOST_URL, params = filters)
         pass
 
 dispatch(HostIDSearchCommand, sys.argv, sys.stdin, sys.stdout, __name__)

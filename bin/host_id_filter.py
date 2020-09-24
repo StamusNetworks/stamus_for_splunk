@@ -47,8 +47,10 @@ class HostIdFilterCommand(EventingCommand):
             # Do search
             filters = StamusHostIdFilters(self.filter).get()
             resp = snc.get(self.HOST_URL, params = filters)
-            data = resp.get('results', [])
-            self.ips_list = [host['ip'] for host in data]
+            while resp is not None:
+                data = resp.get('results', [])
+                self.ips_list = [host['ip'] for host in data]
+                resp = snc.get(self.HOST_URL, params = filters)
 
         for record in records:
             if record.get('src_ip') in self.ips_list or record.get('dest_ip') in self.ips_list:

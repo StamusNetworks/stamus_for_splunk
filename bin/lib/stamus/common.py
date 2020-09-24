@@ -18,14 +18,24 @@ class StamusRestConnection(object):
         else:
             self.check_tls = True
         self.headers = { 'Content-Type': 'application/json', 'Authorization': 'Token ' + self.api_key }
+        self.next = None
+        self.page = 1
 
     def get(self, url, params = None):
+        if not self.next and self.page != 1:
+            return None
         direct_url = self.base_url + url
+        if params is None:
+            params = {}
+        params['page'] = self.page
         resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
         if resp.status_code != 200:
             # This means something went wrong.
             raise(Exception('API error'))
-        return resp.json()
+        data = resp.json()
+        self.next = data['next']
+        self.page +=1
+        return data
 
 
 class StamusHostIdFilters(object):
