@@ -239,7 +239,7 @@
       </chart>
     </panel>
     <panel>
-      <title>HTTP Servers</title>
+      <title>Internal HTTP Servers</title>
       <table>
         <search ref="HTTP Servers"></search>
         <option name="drilldown">none</option>
@@ -264,19 +264,38 @@
   </row>
   <row>
     <panel>
-      <title>TLS Servers</title>
+      <title>Rare Certificate Authority used Internally</title>
       <table>
         <search>
-          <query>| hostidsearch filter="services.values.app_proto=tls" | spath path=services{} output=service_info | mvexpand service_info | spath ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | search app_proto=tls | spath input=service_info port | spath net_info{0}.agg output=Network | table ip Network port tls.fingerprint tls.issuerdn tls.subject</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+          <query>| hostidsearch filter="services.values.app_proto=tls net_info.agg!=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | search app_proto=tls | spath net_info{0}.agg output=Network | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Network | sort 5 count</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Rare Certificate Authority by Country</title>
+      <table>
+        <search>
+          <query>| hostidsearch filter="services.values.app_proto=tls net_info.agg=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | iplocation ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Country | sort 5 count</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
