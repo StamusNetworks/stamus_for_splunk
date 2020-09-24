@@ -135,7 +135,7 @@
   </row>
   <row>
     <panel>
-      <title>Drops</title>
+      <title>Kernel Drops</title>
       <chart>
         <search>
           <query>event_type="stats" | spath "stats.capture.kernel_drops_delta" output=drops| timechart sum(drops) as Drops by host</query>
