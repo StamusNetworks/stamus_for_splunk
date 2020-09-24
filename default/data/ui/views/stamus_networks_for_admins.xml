@@ -1,5 +1,5 @@
 <form>
-  <label>Admins Oriented Dashboard for Stamus</label>
+  <label>Admins Oriented Dashboard for Suricata</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>

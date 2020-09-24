@@ -1,5 +1,5 @@
 <form>
-  <label>Scirius Threat Radar Dashboard</label>
+  <label>STR Dashboard by Stamus Networks</label>
   <description>Data from Scirius Threat Radar</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
@@ -76,7 +76,7 @@
       </chart>
     </panel>
     <panel>
-      <title>Threats by Network</title>
+      <title>Assets with Threat(s) by Network</title>
       <chart>
         <search>
           <query>event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as Assets by Network</query>
