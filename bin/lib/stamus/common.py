@@ -33,7 +33,7 @@ class StamusRestConnection(object):
             # This means something went wrong.
             raise(Exception('API error'))
         data = resp.json()
-        self.next = data['next']
+        self.next = data.get('next')
         self.page +=1
         return data
 
