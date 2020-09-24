@@ -9,22 +9,22 @@
     }, 
     "author": [
       {
-        "name": "Eric Leblond", 
+        "name": "Stamus Networks", 
         "email": "oss@stamus-networks.com", 
-        "company": "Stamus Networks"
+        "company": "Stamus Networks SAS"
       }
     ], 
     "releaseDate": null, 
     "description": "A Splunk\u00ae application for Suricata and Stamus Networks products.", 
     "classification": {
-      "intendedAudience": null, 
-      "categories": [], 
-      "developmentStatus": null
+      "intendedAudience": "Security Analyst", 
+      "categories": ["security", "suricata logs"], 
+      "developmentStatus": "Beta"
     }, 
     "commonInformationModels": null, 
     "license": {
-      "name": null, 
-      "text": null, 
+      "name": "GNU Affero GPL 3.0", 
+      "text": "./COPYING", 
       "uri": null
     }, 
     "privacyPolicy": {
