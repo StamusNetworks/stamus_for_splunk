@@ -1,10 +1,10 @@
-# Welcome to Stamus Networks App for Splunk documentation
+# Welcome to Stamus Networks App for Splunk® documentation
 
 # Overview
 
 ## Introduction
 
-Stamus Networks App for Splunk is an application designed for Suricata sensors users
+Stamus Networks App for Splunk® is an application designed for Suricata sensors users
 and Scirius Security Platform users.
 
 
@@ -38,7 +38,8 @@ The others ones require connectivity or data coming from a SSP.
 #### Concept
 
 Scirius Security Platform features a Host Identification module that builds identity cards of IP addresses seen
-in the network. This provide a consise view of the major features that can be linked to an IP addresses.
+in the network without storing all raw events. This provide a concise view of the major features that can be linked
+to an IP addresses.
 
 An host identification entry includes:
 - List of hostnames associated to the IP
@@ -88,7 +89,7 @@ To get all hosts that are not running a version curl:
 
 #### Host ID filter
 
-The `hostidfilter` command allow you to select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
+The `hostidfilter` commands allow you to select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
 
 The following search get all alerts for host running a service on port 443.
 
