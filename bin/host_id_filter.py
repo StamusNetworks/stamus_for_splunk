@@ -30,7 +30,7 @@ class HostIdFilterCommand(EventingCommand):
         **Description:** Use space separated field=val filter.
         ''')
 
-    HOST_URL = '/rest/appliances/host_id_alerts/'
+    HOST_URL = '/rest/appliances/host_id/'
 
     def __init__(self):
         super(HostIdFilterCommand, self).__init__()

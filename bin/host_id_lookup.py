@@ -9,7 +9,7 @@ from lib.stamus.common import StamusRestConnection
 
 def hostid_lookup_hostname(hostname):
     snc = StamusRestConnection()
-    HOST_URL = '/rest/appliances/host_id_alerts/?host_id_qfilter=' + hostname
+    HOST_URL = '/rest/appliances/host_id/?host_id_qfilter=' + hostname
     resp = snc.get(HOST_URL)
     data = resp.get('results', [])
     ips = []

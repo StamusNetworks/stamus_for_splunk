@@ -23,7 +23,7 @@ class HostIDSearchCommand(GeneratingCommand):
     filter = Option(require=False)
 
     def generate(self):
-        HOST_URL = '/rest/appliances/host_id_alerts/'
+        HOST_URL = '/rest/appliances/host_id/'
         snc = StamusRestConnection()
         # Do search
         filters = None
