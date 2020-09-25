@@ -46,7 +46,7 @@ The others dashboards require connectivity or data coming from a SSP installatio
 
 Scirius Security Platform features a Host Identification module that builds identity cards of IP addresses seen
 in the network without storing all raw events. This provides a concise view of the major attributes that can be linked
-to an IP addresses.
+to an IP address.
 
 An host identification entry includes:
 - List of hostnames associated with the IP
