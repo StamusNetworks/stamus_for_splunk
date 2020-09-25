@@ -4,8 +4,8 @@
 
 ## Introduction
 
-Stamus Networks App for Splunk® is an application designed for Suricata sensors users
-and Scirius Security Platform users.
+Stamus Networks App for Splunk® is an application designed for Suricata sensors users,
+including SELKS users, and Scirius Security Platform users.
 
 
 ## Installation
