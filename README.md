@@ -24,10 +24,13 @@ and setup the following:
 
 ```
 [config]
-api_key = YOURAPIKEY
+api_key = SSP_TOKEN
 base_url = https://SSP_ADDRESS
 check_tls = no
 ```
+
+The `SSP_TOKEN` can be generated from Scirius Security Platform by going to `Account Settings` via the user icon on the top right
+and selecting `Edit token`. Only read access is necessary so a user with low privilege can be used.
 
 ## Usage
 
