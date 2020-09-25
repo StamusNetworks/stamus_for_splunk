@@ -141,7 +141,7 @@ event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown"
 
 # Release Note
 
-## Version 0.1.1
+## Version 0.9.0
 
 Initial release.
 
