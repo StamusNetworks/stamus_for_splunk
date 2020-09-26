@@ -1,5 +1,5 @@
 <form>
-  <label>IP investigation with Stamus Networks</label>
+  <label>Stamus Networks IP investigation</label>
   <description>Stamus Networks data for IP under investigation</description>
   <fieldset submitButton="true" autoRun="false">
     <input type="time" token="TimeRange" searchWhenChanged="true">

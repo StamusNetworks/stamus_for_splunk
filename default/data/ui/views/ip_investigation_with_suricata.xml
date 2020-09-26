@@ -1,5 +1,5 @@
 <form>
-  <label>IP investigation with Suricata</label>
+  <label>Suricata IP investigation</label>
   <description>Suricata data for IP under investigation</description>
   <fieldset submitButton="true" autoRun="false">
     <input type="time" token="TimeRange" searchWhenChanged="true">

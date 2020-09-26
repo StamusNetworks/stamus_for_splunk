@@ -1,5 +1,5 @@
 <form>
-  <label>STR Dashboard by Stamus Networks</label>
+  <label>Stamus Networks STR Dashboard</label>
   <description>Data from Scirius Threat Radar</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
