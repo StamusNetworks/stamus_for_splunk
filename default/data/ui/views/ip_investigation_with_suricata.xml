@@ -186,7 +186,7 @@
       <title>TLS JA3</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>event_type="tls" |search src_ip=10.0.0.10 | stats min(timestamp) as first_seen, max(timestamp) as last_seen by tls.ja3.hash | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start tls.ja3.hash duration</query>
+          <query>event_type="tls" |search src_ip=$src$ | stats min(timestamp) as first_seen, max(timestamp) as last_seen by tls.ja3.hash | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start tls.ja3.hash duration</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -197,6 +197,27 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>SMB User Logon on Host</title>
+      <table>
+        <search>
+          <query>event_type=smb src_ip=$src$ | rename smb.ntlmssp.user as Username | search Username!="" | rename timestamp as Timestamp | table Username, Timestamp</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
     </panel>
   </row>
 </form>
