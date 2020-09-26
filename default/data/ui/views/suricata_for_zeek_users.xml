@@ -254,4 +254,25 @@
       </chart>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>SMB User Logon</title>
+      <table>
+        <search>
+          <query>event_type=smb | rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(timestamp) as "Min Timestamp", max(timestamp) as "Max Timestamp", count by Username, Host | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
