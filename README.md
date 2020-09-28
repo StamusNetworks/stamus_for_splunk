@@ -142,6 +142,13 @@ Get threat by network and use `stamusthreatfilter` to do `threat_id` resolution:
 event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stamusthreatfilter | stats dc(stamus.asset) as Assets by Network, threat_name
 ```
 
+You can also lookup the Threat Family information via the `threatfamilylookup`:
+
+```
+event_type="stamus" | lookup threatfamilylookup family_id as stamus.family_id | top family_name
+```
+
+
 # Release Note
 
 ## Version 0.9.0
