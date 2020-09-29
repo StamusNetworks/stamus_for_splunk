@@ -217,9 +217,9 @@
       <title>Identified Services</title>
       <table>
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath path=services{} output=service_info | mvexpand service_info | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | spath input=service_info port  | search port | eval Information=coalesce('http.server', 'tls.cn', "No detail") | rename port as Port | rename app_proto as "Application Protocol" | rename first_seen as "First Seen" | rename last_seen as "Last Seen" | table Port "Application Protocol" Information "First Seen" "Last Seen"</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <query>| hostidsearch filter="ip=$src$" | spath path=services{} output=service_info | mvexpand service_info | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | spath input=service_info port  | search port | eval "Server Information"=coalesce('http.server', 'tls.cn', 'ssh.server.software_version', "No detail") | rename port as Port | rename app_proto as "Application Protocol" | rename first_seen as "First Seen" | rename last_seen as "Last Seen" | table Port "Application Protocol" "Server Information" "First Seen" "Last Seen"</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -248,6 +248,146 @@
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
+      </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Rare visited HTTP Hostnames</title>
+      <table>
+        <search>
+          <query>event_type="http" | search src_ip=$src$ | rare http.hostname</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top visited HTTP Hostnames</title>
+      <chart>
+        <search>
+          <query>event_type="http" | search src_ip=$src$ | top http.hostname</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Rare visited TLS Server Name Indication</title>
+      <table>
+        <search>
+          <query>event_type="tls" | search src_ip=$src$ | rare tls.sni</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Activity as Server for the IP</title>
+      <table>
+        <search>
+          <query>event_type="flow" dest_ip=$src$ flow.state!=new | eval Network = if(Net == "", "Unknown", Net) | top src_ip by dest_port, app_proto |  sort -count | table src_ip, Network, dest_port, app_proto, count</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top Activity as Client for the IP</title>
+      <table>
+        <search>
+          <query>event_type="flow" src_ip=$src$ flow.state!=new | top dest_ip by dest_port, app_proto | sort -count | table dest_ip, dest_port, Network, app_proto, count</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>SSH Agents on IP</title>
+      <viz type="timeline_app.timeline">
+        <search>
+          <query>| hostidsearch filter="ip=$src$" | spath path=ssh_client{} output=finfo| mvexpand finfo |  spath input=finfo | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start software_version duration</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </viz>
     </panel>
   </row>

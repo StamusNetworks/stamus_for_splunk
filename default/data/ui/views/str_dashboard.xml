@@ -121,6 +121,31 @@
   </row>
   <row>
     <panel>
+      <title>Assets Timeline</title>
+      <viz type="timeline_app.timeline">
+        <search>
+          <query>event_type="stamus" | stamusthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup hostidlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="timeline_app.timeline.axisTimeFormat">SECONDS</option>
+        <option name="timeline_app.timeline.colorMode">categorical</option>
+        <option name="timeline_app.timeline.maxColor">#DA5C5C</option>
+        <option name="timeline_app.timeline.minColor">#FFE8E8</option>
+        <option name="timeline_app.timeline.numOfBins">6</option>
+        <option name="timeline_app.timeline.tooltipTimeFormat">SECONDS</option>
+        <option name="timeline_app.timeline.useColors">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Threat Families</title>
       <chart>
         <search>
@@ -205,31 +230,6 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </chart>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Assets Timeline</title>
-      <viz type="timeline_app.timeline">
-        <search>
-          <query>event_type="stamus" | stamusthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup hostidlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="timeline_app.timeline.axisTimeFormat">SECONDS</option>
-        <option name="timeline_app.timeline.colorMode">categorical</option>
-        <option name="timeline_app.timeline.maxColor">#DA5C5C</option>
-        <option name="timeline_app.timeline.minColor">#FFE8E8</option>
-        <option name="timeline_app.timeline.numOfBins">6</option>
-        <option name="timeline_app.timeline.tooltipTimeFormat">SECONDS</option>
-        <option name="timeline_app.timeline.useColors">1</option>
-        <option name="trellis.enabled">0</option>
-        <option name="trellis.scales.shared">1</option>
-        <option name="trellis.size">medium</option>
-      </viz>
     </panel>
   </row>
   <row>
