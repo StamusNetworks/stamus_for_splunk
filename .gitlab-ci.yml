@@ -1,0 +1,23 @@
+stages:
+  - pkg
+
+build-splunk-app:
+  image: python
+  stage: pkg
+  artifacts:
+    expire_in: 1 week
+    paths:
+    - _build/*.tar.gz 
+  needs: []
+  before_script:
+    - pip install splunk-packaging-toolkit
+  script:
+    - rm -rf _build
+    - mkdir -p _build/stamus_for_splunk
+    - git archive $CI_COMMIT_SHA | tar -x -C _build/stamus_for_splunk
+    - rm _build/stamus_for_splunk/.gitlab-ci.yml
+    - slim validate _build/stamus_for_splunk
+    - slim package _build/stamus_for_splunk -o _build/
+
+
+ 
