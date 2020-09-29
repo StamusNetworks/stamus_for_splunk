@@ -9,7 +9,7 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="text" token="src">
+    <input type="text" token="src" searchWhenChanged="true">
       <label>IP Address</label>
     </input>
   </fieldset>
@@ -204,7 +204,7 @@
       <title>SMB User Logon on Host</title>
       <table>
         <search>
-          <query>event_type=smb src_ip=$src$ | rename smb.ntlmssp.user as Username | search Username!="" | rename timestamp as Timestamp | table Username, Timestamp</query>
+          <query>event_type=smb src_ip=$src$ | rename smb.ntlmssp.user as Username | search Username!="" | rename timestamp as Timestamp | table Username, Timestamp | head 7</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>

@@ -9,7 +9,7 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="text" token="src">
+    <input type="text" token="src" searchWhenChanged="true">
       <label>IP Address</label>
     </input>
   </fieldset>
