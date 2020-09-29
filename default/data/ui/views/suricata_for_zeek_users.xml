@@ -1,5 +1,5 @@
 <form>
-  <label>Suricata for Zeek Users</label>
+  <label>Suricata for Zeek Users Dashboard</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
