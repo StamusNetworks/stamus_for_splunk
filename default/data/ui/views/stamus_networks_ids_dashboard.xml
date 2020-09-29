@@ -51,7 +51,7 @@
       <title>Alerts History</title>
       <chart>
         <search>
-          <query>event_type=alert| eval tag=if('alert.tag'==NULL, "Untagged", 'alert.tag') | timechart count by tag limit=10</query>
+          <query>event_type=alert| eval tag=if(isnull('alert.tag'), "untagged", 'alert.tag') | timechart count by tag</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -83,7 +83,7 @@
       <title>Top Networks by Unique Alerts count</title>
       <chart>
         <search>
-          <query>event_type="alert" | eval Network = if('net_info.dest_agg' == "" , "Unknown", 'net_info.dest_agg') | stats dc(alert.signature_id) by Network | sort -count</query>
+          <query>event_type="alert" | eval Net=mvappend('net_info.dest_agg', 'net_info.src_agg') | mvexpand Net | eval Network = if('Net' == "", "Unknown", 'Net') | stats dc(alert.signature_id) as "Unique Alerts" by Network | sort -count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -97,7 +97,7 @@
       <title>Top Host by unique alert count</title>
       <table>
         <search>
-          <query>event_type="alert" | stats dc(alert.signature_id) as  "Unique Sigs" by src_ip | sort -count | top "Unique Sigs", src_ip limit 5</query>
+          <query>event_type="alert" | eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

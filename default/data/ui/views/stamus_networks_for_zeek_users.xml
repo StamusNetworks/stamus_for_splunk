@@ -238,7 +238,7 @@
       </table>
     </panel>
   </row>
-    <row>
+  <row>
     <panel>
       <html>
          <h3>TLS Analysis</h3>
@@ -250,7 +250,7 @@
       <title>Top TLS JA3 Hashes</title>
       <table>
         <search>
-          <query>event_type=tls | rename tls.ja3.hash as "JA3 Hash" | top "JA3 Hash"</query>
+          <query>event_type=tls | spath tls.ja3.agent{0} output="agent" | eval "JA3 Agent"=coalesce('agent', 'tls.ja3.hash') | top "JA3 Agent"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
