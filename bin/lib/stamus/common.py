@@ -5,7 +5,7 @@ import re
 from splunk.clilib import cli_common as cli
 
 
-FIELDS_SUBSTITUTION = (['http.user_agent', 'http_user_agent'], ['http.user_agent_count', 'http_user_agent_count'], ['tls.ja3', 'tls_ja3'], ['tls.ja3_count', 'tls_ja3_count'])
+FIELDS_SUBSTITUTION = (['http.user_agent', 'http_user_agent'], ['http.user_agent_count', 'http_user_agent_count'], ['tls.ja3', 'tls_ja3'], ['tls.ja3_count', 'tls_ja3_count'], ['ssh.client', 'ssh_client'], ['ssh.client_count', 'ssh_client_count'])
 
 class StamusRestConnection(object):
     def __init__(self):
