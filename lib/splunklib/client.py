@@ -828,7 +828,7 @@ class Entity(Endpoint):
 
     ``Entity`` provides the majority of functionality required by entities.
     Subclasses only implement the special cases for individual entities.
-    For example for deployment serverclasses, the subclass makes whitelists and
+    For example for deployment serverclasses, the subclass makes passlists and
     blacklists into Python lists.
 
     An ``Entity`` is addressed like a dictionary, with a few extensions,
@@ -836,7 +836,7 @@ class Entity(Endpoint):
 
         ent['email.action']
         ent['disabled']
-        ent['whitelist']
+        ent['passlist']
 
     Many endpoints have values that share a prefix, such as
     ``email.to``, ``email.action``, and ``email.subject``. You can extract
@@ -853,7 +853,7 @@ class Entity(Endpoint):
 
         ent.email.action
         ent.disabled
-        ent.whitelist
+        ent.passlist
 
     However, because some of the field names are not valid Python identifiers,
     the dictionary-like syntax is preferrable.
