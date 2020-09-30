@@ -2,7 +2,6 @@
 
 import csv
 import sys
-import os
 
 from lib.stamus.common import StamusRestConnection
 
