@@ -117,14 +117,15 @@
       <table>
         <search>
           <query>event_type="alert" alert.tag="relevant" | top alert.signature by net_info.src_agg | table alert.signature, net_info.src_agg, count</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>

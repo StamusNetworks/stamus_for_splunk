@@ -91,27 +91,6 @@
         <option name="wrap">true</option>
       </table>
     </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Alerts on Signatures that are less than 1 month old</title>
-      <table>
-        <search>
-          <query>event_type=alert | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="count">20</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">false</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
-    </panel>
     <panel>
       <title>Rare Signatures</title>
       <table>
