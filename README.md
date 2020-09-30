@@ -151,6 +151,15 @@ event_type="stamus" | lookup threatfamilylookup family_id as stamus.family_id | 
 
 # Release Note
 
+## Version 0.9.2
+
+- Improve IDS dashboards
+- Fix timestamp picker in Suricata admin Dashboard
+
+## Version 0.9.1
+
+Fix errors and warnings found by Splunk AppInspect
+
 ## Version 0.9.0
 
 Initial release.
