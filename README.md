@@ -19,7 +19,7 @@ don't have a Scirius Security Platform (SSP).
 
 Scirius Security Platform users need to setup the connectivity with their SSP.
 
-To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_networks_for_splunk` usually)
+To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
 and setup the following:
 
 ```

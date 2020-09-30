@@ -4,7 +4,7 @@
     "title": "Stamus Networks App for Splunk", 
     "id": {
       "group": null, 
-      "name": "stamus_networks_for_splunk", 
+      "name": "stamus_for_splunk", 
       "version": "0.9.0"
     }, 
     "author": [
