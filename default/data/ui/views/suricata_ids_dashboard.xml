@@ -117,14 +117,15 @@
       <table>
         <search>
           <query>event_type="alert" app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
@@ -135,12 +136,13 @@
       <chart>
         <search>
           <query>event_type="alert" app_proto="http" | top http.hostname</query>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
   </row>
@@ -150,14 +152,15 @@
       <table>
         <search>
           <query>event_type="alert" app_proto="tls" | top tls.sni</query>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
