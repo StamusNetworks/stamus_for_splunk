@@ -4,8 +4,8 @@
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
       <default>
-        <earliestTime>-24h@h</earliestTime>
-        <latestTime>now</latestTime>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
       </default>
     </input>
   </fieldset>
