@@ -29,6 +29,11 @@ class HostIdFilterCommand(EventingCommand):
         **Syntax:** **filter=***<expression>*
         **Description:** Use space separated field=val filter.
         ''')
+    keys = Option(doc='''
+        **Syntax:** **keys=***<expression>*
+        **Description:** Comma separated list of fields that are IPs.
+        ''')
+
 
     HOST_URL = '/rest/appliances/host_id/'
 
@@ -42,6 +47,11 @@ class HostIdFilterCommand(EventingCommand):
                 yield record
             return
 
+        if not self.keys:
+            self.keys = ['src_ip', 'dest_ip']
+        else:
+            self.keys = self.keys.split(',')
+
         if self.ips_list is None:
             snc = StamusRestConnection()
             # Do search
@@ -53,8 +63,10 @@ class HostIdFilterCommand(EventingCommand):
                 resp = snc.get(self.HOST_URL, params = filters)
 
         for record in records:
-            if record.get('src_ip') in self.ips_list or record.get('dest_ip') in self.ips_list:
-                yield record
+            for key in self.keys:
+                if record.get(key) in self.ips_list:
+                    yield record
+                    break
         return
 
 

@@ -88,10 +88,10 @@ To get software version of all HTTP server in a network (here `internet`):
 | hostidsearch filter="services.values.app_proto=http net_info.agg=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"
 ```
 
-To get all hosts that are not running a version curl:
+To get all requests to nginx server where client IP is running a service on port 9997:
 
 ```
-| hostidsearch filter="http_user_agent.agent!=curl*" | spath http_user_agent{}.agent output=agent | spath ip | top ip, agent
+| source="nginx.log" sourcetype="access_combined" | hostidfilter filter="services.port=9997" keys="clientip" | top clientip
 ```
 
 #### Host ID filter
