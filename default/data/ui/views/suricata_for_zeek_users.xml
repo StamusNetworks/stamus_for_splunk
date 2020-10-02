@@ -15,7 +15,7 @@
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="tls">
-    <query>event_type=tls | fields tls.sni tls.version tls.ja3.hash dest_ip</query>
+    <query>event_type=tls | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
