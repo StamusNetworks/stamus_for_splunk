@@ -10,14 +10,17 @@
       </default>
     </input>
   </fieldset>
+  <search id="alert">
+    <query>event_type=alert | fields alert.category</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <row>
     <panel>
       <title>Alerts History by Category</title>
       <chart>
-        <search>
-          <query>event_type=alert| timechart count by alert.category</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| timechart count by alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -46,10 +49,8 @@
     <panel>
       <title>Alerts Categories</title>
       <chart>
-        <search>
-          <query>event_type=alert | top alert.category</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| top alert.category</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -75,10 +76,8 @@
     <panel>
       <title>Top Host by unique alert count</title>
       <table>
-        <search>
-          <query>event_type="alert" | eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -94,10 +93,8 @@
     <panel>
       <title>Rare Signatures</title>
       <table>
-        <search>
-          <query>event_type="alert" | rare alert.signature</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| rare alert.signature</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -115,8 +112,8 @@
     <panel>
       <title>Rare HTTP User Agents in Alerts</title>
       <table>
-        <search>
-          <query>event_type="alert" app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
+        <search base="alert">
+          <query>|search app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -134,10 +131,8 @@
     <panel>
       <title>Top HTTP Hostnames in Alerts</title>
       <chart>
-        <search>
-          <query>event_type="alert" app_proto="http" | top http.hostname</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>|search app_proto="http" | top http.hostname</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
@@ -150,10 +145,8 @@
     <panel>
       <title>Top TLS SNI in Alerts</title>
       <table>
-        <search>
-          <query>event_type="alert" app_proto="tls" | top tls.sni</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>|search app_proto="tls" | top tls.sni</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
