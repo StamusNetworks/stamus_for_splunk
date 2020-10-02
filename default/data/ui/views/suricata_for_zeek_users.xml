@@ -9,6 +9,21 @@
       </default>
     </input>
   </fieldset>
+  <search id="http">
+    <query>event_type=http | fields http.hostname http.http_user_agent</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="tls">
+    <query>event_type=tls | fields tls.sni tls.version tls.ja3.hash dest_ip</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="smb">
+    <query>event_type=smb | fields smb.ntlmssp.user src_ip</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <row>
     <panel>
       <title>Events per Event Type</title>
@@ -58,10 +73,8 @@
     <panel>
       <title>HTTP Hostname</title>
       <chart>
-        <search>
-          <query>event_type=http | top http.hostname</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="http">
+          <query>| top http.hostname</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
@@ -101,10 +114,8 @@
     <panel>
       <title>HTTP User Agents</title>
       <chart>
-        <search>
-          <query>event_type=http | top http.http_user_agent</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="http">
+          <query>| top http.http_user_agent</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
@@ -146,10 +157,8 @@
     <panel>
       <title>TLS Server Name Indication</title>
       <table>
-        <search>
-          <query>event_type=tls | top tls.sni</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="tls">
+          <query>| top tls.sni</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -165,10 +174,8 @@
     <panel>
       <title>TLS Version</title>
       <chart>
-        <search>
-          <query>event_type=tls | top tls.version</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="tls">
+          <query>| top tls.version</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
@@ -178,10 +185,8 @@
     <panel>
       <title>Top TLS JA3 Hashes</title>
       <table>
-        <search>
-          <query>event_type=tls | rename tls.ja3.hash as "JA3 Hash" | top "JA3 Hash"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="tls">
+          <query>| rename tls.ja3.hash as "JA3 Hash" | top "JA3 Hash"</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -199,10 +204,8 @@
     <panel>
       <title>Top Servers and JA3S</title>
       <table>
-        <search>
-          <query>event_type=tls | rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+        <search base="tls">
+          <query>| rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -217,10 +220,8 @@
     <panel>
       <title>Top TLS JA3S Hashes</title>
       <chart>
-        <search>
-          <query>event_type=tls | rename tls.ja3s.hash as "JA3S Hash" | top "JA3S Hash"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="tls">
+          <query>| rename tls.ja3s.hash as "JA3S Hash" | top "JA3S Hash"</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
@@ -232,10 +233,8 @@
     <panel>
       <title>Users in SMB events</title>
       <chart>
-        <search>
-          <query>event_type=smb | rename smb.ntlmssp.user as Username | top Username</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="smb">
+          <query>| rename smb.ntlmssp.user as Username | top Username</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
@@ -291,10 +290,8 @@
     <panel>
       <title>SMB User Logon</title>
       <table>
-        <search>
-          <query>event_type=smb | rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(timestamp) as "Min Timestamp", max(timestamp) as "Max Timestamp", count by Username, Host | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="smb">
+          <query>| rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(timestamp) as "Min Timestamp", max(timestamp) as "Max Timestamp", count by Username, Host | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
