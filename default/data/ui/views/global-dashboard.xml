@@ -10,19 +10,16 @@
       </default>
     </input>
   </fieldset>
-  <!--Base search part start-->
   <search id="alert">
     <query>event_type=alert | fields alert.category alert.signature</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
-  <!-- --> 
   <search id="http">
     <query>event_type=http | fields http.http_user_agent http.hostname</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
-  <!-- -->
   <search id="tls">
     <query>event_type=tls | fields tls.version tls.sni</query>
     <earliest>$timestamp.earliest$</earliest>
