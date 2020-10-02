@@ -10,6 +10,16 @@
       </default>
     </input>
   </fieldset>
+  <search id="stamus">
+    <query>event_type="stamus" | fields stamus.asset stamus.kill_chain stamus.threat_id </query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="alert">
+    <query>event_type=alert | fields "hostname_info.host" "geoip.location.lat" "geoip.location.lon" hostname_info.domain alert.signature_id alert.signature sig.created tls.subject alert.category</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <row>
     <panel>
       <html>
@@ -21,10 +31,8 @@
     <panel>
       <title>Kill Chain Phase Distribution</title>
       <chart>
-        <search>
-          <query>event_type="stamus" | stats dc(stamus.asset) count by stamus.kill_chain | table stamus.kill_chain count</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="stamus">
+          <query>| stats dc(stamus.asset) count by stamus.kill_chain | table stamus.kill_chain count</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
@@ -64,8 +72,8 @@
     <panel>
       <title>Unique Threats by Assets</title>
       <chart>
-        <search>
-          <query>event_type="stamus" | stats dc(stamus.threat_id) as "Unique Threat(s)" count by stamus.asset | sort 5 -"Unique Threat(s)" | rename stamus.asset as Asset | table Asset "Unique Threat(s)"</query>
+        <search base="stamus">
+          <query>| stats dc(stamus.threat_id) as "Unique Threat(s)" count by stamus.asset | sort 5 -"Unique Threat(s)" | rename stamus.asset as Asset | table Asset "Unique Threat(s)"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -108,8 +116,8 @@
     <panel>
       <title>Assets under Attack by Network</title>
       <chart>
-        <search>
-          <query>event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as "Unique Asset(s)" count by Network | sort 5 -"Unique Asset(s)" | table Network "Unique Asset(s)"</query>
+        <search base="stamus">
+          <query>| eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as "Unique Asset(s)" count by Network | sort 5 -"Unique Asset(s)" | table Network "Unique Asset(s)"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -160,10 +168,8 @@
     <panel>
       <title>Alerts Count by Country</title>
       <map>
-        <search>
-          <query>event_type=alert| geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
@@ -199,10 +205,8 @@
     <panel>
       <title>Top Hostnames in Alert events</title>
       <chart>
-        <search>
-          <query>event_type=alert |top 20 hostname_info.host | search count&gt;5</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>|top 20 hostname_info.host | search count&gt;5</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -228,10 +232,8 @@
     <panel>
       <title>Top Domains by Unique Signature</title>
       <chart>
-        <search>
-          <query>event_type=alert | rename hostname_info.domain as "Domain" | stats dc(alert.signature_id) AS Signature by "Domain" | sort -Signature limit=5</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| rename hostname_info.domain as "Domain" | stats dc(alert.signature_id) AS Signature by "Domain" | sort -Signature limit=5</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
@@ -271,10 +273,8 @@
     <panel>
       <title>Alerts on Signatures that are less than 1 month old</title>
       <table>
-        <search>
-          <query>event_type=alert | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
@@ -299,10 +299,8 @@
     <panel>
       <title>Top TLS Subjects in Alert events</title>
       <chart>
-        <search>
-          <query>event_type=alert |top 10 tls.subject</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>|top 10 tls.subject</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -328,10 +326,8 @@
     <panel>
       <title>Alerts Categories</title>
       <chart>
-        <search>
-          <query>event_type=alert | top alert.category</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| top alert.category</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -356,10 +352,8 @@
     <panel>
       <title>Alerts History</title>
       <chart>
-        <search>
-          <query>event_type=alert| timechart count by alert.signature limit=10</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| timechart count by alert.signature limit=10</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>

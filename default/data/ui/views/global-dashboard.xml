@@ -10,14 +10,27 @@
       </default>
     </input>
   </fieldset>
+  <search id="alert">
+    <query>event_type=alert | fields alert.category alert.signature</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="http">
+    <query>event_type=http | fields http.http_user_agent http.hostname</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="tls">
+    <query>event_type=tls | fields tls.version tls.sni</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <row>
     <panel>
       <chart>
         <title>Alerts Categories</title>
-        <search>
-          <query>event_type=alert | top alert.category</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| top alert.category</query>
         </search>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
@@ -42,10 +55,8 @@
     <panel>
       <chart>
         <title>Alerts history</title>
-        <search>
-          <query>event_type=alert| timechart count by alert.signature limit=10</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| timechart count by alert.signature limit=10</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -73,10 +84,8 @@
     <panel>
       <chart>
         <title>HTTP User Agents</title>
-        <search>
-          <query>event_type=http |  top http.http_user_agent</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="http">
+          <query>|  top http.http_user_agent</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -101,10 +110,8 @@
     <panel>
       <chart>
         <title>Top HTTP Hostnames</title>
-        <search>
-          <query>event_type=http |top 20 http.hostname | search count&gt;5</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="http">
+          <query>|top 20 http.hostname | search count&gt;5</query>
         </search>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
@@ -250,10 +257,8 @@
     <panel>
       <chart>
         <title>TLS Versions</title>
-        <search>
-          <query>event_type=tls | top tls.version</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="tls">
+          <query>| top tls.version</query>
         </search>
         <option name="charting.axisTitleX.visibility">visible</option>
         <option name="charting.axisTitleY.visibility">visible</option>
@@ -279,9 +284,7 @@
       <chart>
         <title>Top TLS Server Name Indication</title>
         <search>
-          <query>event_type=tls |top 10 tls.sni</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+          <query>|top 10 tls.sni</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
