@@ -16,7 +16,7 @@
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="alert">
-    <query>event_type=alert | fileds "hostname_info.host" "geoip.location.lat" "geoip.location.lon" hostname_info.domain alert.signature_id alert.signature sig.created tls.subject alert.category</query>
+    <query>event_type=alert | fields "hostname_info.host" "geoip.location.lat" "geoip.location.lon" hostname_info.domain alert.signature_id alert.signature sig.created tls.subject alert.category</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
