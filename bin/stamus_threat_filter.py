@@ -16,14 +16,14 @@ class StamusThreatFilterCommand(EventingCommand):
     """ Filters, augments, and updates records on the events stream.
     ##Syntax
     .. code-block::
-        stamusthreatfilter
+        snthreatfilter
     ##Description
     Enrich Stamus threat event with information
     ##Example
     Display only alerts for IP that run a service on port 443.
     .. code-block::
         | even_type="stamus"
-        | stamusthreatfilter
+        | snthreatfilter
         | top stamus.threat_name
     """
     filter = Option(doc='''

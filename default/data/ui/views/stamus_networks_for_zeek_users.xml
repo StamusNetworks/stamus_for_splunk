@@ -182,7 +182,7 @@
       <title>HTTP servers in Internal Network</title>
       <chart>
         <search>
-          <query>| hostidsearch filter="services.port=80 net_info.agg!=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"</query>
+          <query>| snhostsearch filter="services.port=80 net_info.agg!=internet"| spath "services{}.values{}.http.server" | top "services{}.values{}.http.server"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>

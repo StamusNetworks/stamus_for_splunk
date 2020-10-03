@@ -15,7 +15,7 @@ class HostIdFilterCommand(EventingCommand):
     """ Filters, augments, and updates records on the events stream.
     ##Syntax
     .. code-block::
-        hostidfilter filter=<expression>
+        snhostfilter filter=<expression>
     ##Description
     Filter events to get only events where or the source or the destination IP
     is in the host ID set defined by the filter.

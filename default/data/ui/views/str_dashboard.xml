@@ -36,7 +36,7 @@
       <title>Timeline of Stamus Events on Assets</title>
       <chart>
         <search>
-          <query>event_type="stamus" | stamusthreatfilter | timechart dc(stamus.asset) by threat_name</query>
+          <query>event_type="stamus" | snthreatfilter | timechart dc(stamus.asset) by threat_name</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -124,7 +124,7 @@
       <title>Assets Timeline</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>event_type="stamus" | stamusthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup hostidlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
+          <query>event_type="stamus" | snthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup snhostlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -149,7 +149,7 @@
       <title>Threat Families</title>
       <chart>
         <search>
-          <query>event_type="stamus" | lookup threatfamilylookup family_id as stamus.family_id | top family_name</query>
+          <query>event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -192,7 +192,7 @@
       <title>Number of Assets per Threat</title>
       <chart>
         <search>
-          <query>event_type="stamus" | stamusthreatfilter | stats dc(stamus.asset) as asset_count by threat_name | table threat_name, asset_count</query>
+          <query>event_type="stamus" | snthreatfilter | stats dc(stamus.asset) as asset_count by threat_name | table threat_name, asset_count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -244,7 +244,7 @@
       <title>Servers count per protocol</title>
       <chart>
         <search>
-          <query>| hostidsearch filter="services.proto=tcp" | spath services{}.values{}.app_proto output=app_proto | spath ip | stats count(ip) by app_proto</query>
+          <query>| snhostsearch filter="services.proto=tcp" | spath services{}.values{}.app_proto output=app_proto | spath ip | stats count(ip) by app_proto</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -312,7 +312,7 @@
       <title>Rare Certificate Authority used Internally</title>
       <table>
         <search>
-          <query>| hostidsearch filter="services.values.app_proto=tls net_info.agg!=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | search app_proto=tls | spath net_info{0}.agg output=Network | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Network | sort 5 count</query>
+          <query>| snhostsearch filter="services.values.app_proto=tls net_info.agg!=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | search app_proto=tls | spath net_info{0}.agg output=Network | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Network | sort 5 count</query>
           <earliest>-7d@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -332,7 +332,7 @@
       <title>Rare Certificate Authority by Country</title>
       <table>
         <search>
-          <query>| hostidsearch filter="services.values.app_proto=tls net_info.agg=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | iplocation ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Country | sort 5 count</query>
+          <query>| snhostsearch filter="services.values.app_proto=tls net_info.agg=internet" | spath path=services{} output=service_info | mvexpand service_info | spath ip | iplocation ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | rename tls.issuerdn as "Certificate Authority" | rare "Certificate Authority" by Country | sort 5 count</query>
           <earliest>-7d@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>

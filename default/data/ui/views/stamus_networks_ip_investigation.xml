@@ -18,7 +18,7 @@
       <title>Global Information</title>
       <single>
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath | spath "net_info{0}.agg" | eval Network = if('net_info{0}.agg' == "" , "Unknown", 'net_info{0}.agg')  | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval "First Seen"=tostring(round(now() - iso8601_start, 0), "duration") + " ago" | eval "Last Seen"= tostring(round(now() - iso8601_end, 0), "duration") + " ago" | rename services_count as "Service(s)" | rename http_user_agent_count as "HTTP User Agent(s)" | rename tls_ja3_count as "TLS Agent(s)" | rename username_count as "User(s)" | rename hostname_count as "Hostname(s)" | table  Network  "Hostname(s)" "Service(s)" "User(s)" "HTTP User Agent(s)" "TLS Agent(s)"  "First Seen" "Last Seen"</query>
+          <query>| snhostsearch filter="ip=$src$" | spath | spath "net_info{0}.agg" | eval Network = if('net_info{0}.agg' == "" , "Unknown", 'net_info{0}.agg')  | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval "First Seen"=tostring(round(now() - iso8601_start, 0), "duration") + " ago" | eval "Last Seen"= tostring(round(now() - iso8601_end, 0), "duration") + " ago" | rename services_count as "Service(s)" | rename http_user_agent_count as "HTTP User Agent(s)" | rename tls_ja3_count as "TLS Agent(s)" | rename username_count as "User(s)" | rename hostname_count as "Hostname(s)" | table  Network  "Hostname(s)" "Service(s)" "User(s)" "HTTP User Agent(s)" "TLS Agent(s)"  "First Seen" "Last Seen"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -49,7 +49,7 @@
       <title>Username</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>| hostidsearch filter=ip=$src$ | spath path=username{} output=username_info | mvexpand username_info |  spath input=username_info | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | table iso8601_start user duration</query>
+          <query>| snhostsearch filter=ip=$src$ | spath path=username{} output=username_info | mvexpand username_info |  spath input=username_info | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | table iso8601_start user duration</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -72,7 +72,7 @@
       <title>Hostname</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath path=hostname{} output=hostname_info | mvexpand hostname_info |  spath input=hostname_info | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | table iso8601_start host duration</query>
+          <query>| snhostsearch filter="ip=$src$" | spath path=hostname{} output=hostname_info | mvexpand hostname_info |  spath input=hostname_info | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | table iso8601_start host duration</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -217,7 +217,7 @@
       <title>Identified Services</title>
       <table>
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath path=services{} output=service_info | mvexpand service_info | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | spath input=service_info port  | search port | eval "Server Information"=coalesce('http.server', 'tls.cn', 'ssh.server.software_version', "No detail") | rename port as Port | rename app_proto as "Application Protocol" | rename first_seen as "First Seen" | rename last_seen as "Last Seen" | table Port "Application Protocol" "Server Information" "First Seen" "Last Seen"</query>
+          <query>| snhostsearch filter="ip=$src$" | spath path=services{} output=service_info | mvexpand service_info | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | spath input=service_info port  | search port | eval "Server Information"=coalesce('http.server', 'tls.cn', 'ssh.server.software_version', "No detail") | rename port as Port | rename app_proto as "Application Protocol" | rename first_seen as "First Seen" | rename last_seen as "Last Seen" | table Port "Application Protocol" "Server Information" "First Seen" "Last Seen"</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -238,7 +238,7 @@
       <title>HTTP User Agents</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath path=http_user_agent{} output=finfo| mvexpand finfo |  spath input=finfo | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start agent duration</query>
+          <query>| snhostsearch filter="ip=$src$" | spath path=http_user_agent{} output=finfo| mvexpand finfo |  spath input=finfo | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start agent duration</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -381,7 +381,7 @@
       <title>SSH Agents on IP</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>| hostidsearch filter="ip=$src$" | spath path=ssh_client{} output=finfo| mvexpand finfo |  spath input=finfo | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start software_version duration</query>
+          <query>| snhostsearch filter="ip=$src$" | spath path=ssh_client{} output=finfo| mvexpand finfo |  spath input=finfo | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start software_version duration</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
