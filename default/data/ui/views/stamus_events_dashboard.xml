@@ -11,7 +11,7 @@
     </input>
   </fieldset>
   <search id="stamus">
-    <query>event_type="stamus" | fields stamus.asset stamus.kill_chain stamus.threat_id </query>
+    <query>event_type="stamus" | fields stamus.asset stamus.kill_chain stamus.threat_id stamus.asset_net_info</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
@@ -33,7 +33,6 @@
       <chart>
         <search base="stamus">
           <query>| stats dc(stamus.asset) count by stamus.kill_chain | table stamus.kill_chain count</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -74,9 +73,6 @@
       <chart>
         <search base="stamus">
           <query>| stats dc(stamus.threat_id) as "Unique Threat(s)" count by stamus.asset | sort 5 -"Unique Threat(s)" | rename stamus.asset as Asset | table Asset "Unique Threat(s)"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -118,9 +114,6 @@
       <chart>
         <search base="stamus">
           <query>| eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as "Unique Asset(s)" count by Network | sort 5 -"Unique Asset(s)" | table Network "Unique Asset(s)"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -170,7 +163,6 @@
       <map>
         <search base="alert">
           <query>| geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
@@ -234,7 +226,6 @@
       <chart>
         <search base="alert">
           <query>| rename hostname_info.domain as "Domain" | stats dc(alert.signature_id) AS Signature by "Domain" | sort -Signature limit=5</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -275,7 +266,6 @@
       <table>
         <search base="alert">
           <query>| eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>

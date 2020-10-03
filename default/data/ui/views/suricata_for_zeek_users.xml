@@ -75,7 +75,6 @@
       <chart>
         <search base="http">
           <query>| top http.hostname</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -116,7 +115,6 @@
       <chart>
         <search base="http">
           <query>| top http.http_user_agent</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -159,7 +157,6 @@
       <table>
         <search base="tls">
           <query>| top tls.sni</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -176,7 +173,6 @@
       <chart>
         <search base="tls">
           <query>| top tls.version</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -187,7 +183,6 @@
       <table>
         <search base="tls">
           <query>| rename tls.ja3.hash as "JA3 Hash" | top "JA3 Hash"</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -206,7 +201,6 @@
       <table>
         <search base="tls">
           <query>| rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -222,7 +216,6 @@
       <chart>
         <search base="tls">
           <query>| rename tls.ja3s.hash as "JA3S Hash" | top "JA3S Hash"</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -235,7 +228,6 @@
       <chart>
         <search base="smb">
           <query>| rename smb.ntlmssp.user as Username | top Username</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -292,7 +284,6 @@
       <table>
         <search base="smb">
           <query>| rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(timestamp) as "Min Timestamp", max(timestamp) as "Max Timestamp", count by Username, Host | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>

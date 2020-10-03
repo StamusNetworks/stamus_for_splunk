@@ -78,7 +78,6 @@
       <table>
         <search base="alert">
           <query>| eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -95,7 +94,6 @@
       <table>
         <search base="alert">
           <query>| rare alert.signature</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -114,9 +112,6 @@
       <table>
         <search base="alert">
           <query>|search app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -133,7 +128,6 @@
       <chart>
         <search base="alert">
           <query>|search app_proto="http" | top http.hostname</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -147,7 +141,6 @@
       <table>
         <search base="alert">
           <query>|search app_proto="tls" | top tls.sni</query>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
