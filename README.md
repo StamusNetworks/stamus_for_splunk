@@ -17,6 +17,8 @@ the visualizations.
 After installing the application, you can directly use it if you are a Suricata sensors user and
 don't have a Scirius Security Platform (SSP).
 
+##  Configuration
+
 Scirius Security Platform users need to setup the connectivity with their SSP.
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
@@ -150,6 +152,12 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 
 
 # Release Note
+
+## Version 0.9.3
+
+- CIM 4.x compatibility
+- keys option added to  snhostfilter for easy cross source filtering
+- performance optimization of dashboards
 
 ## Version 0.9.2
 
