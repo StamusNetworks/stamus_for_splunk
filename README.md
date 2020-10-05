@@ -156,8 +156,9 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 ## Version 0.9.3
 
 - CIM 4.x compatibility
-- keys option added to  snhostfilter for easy cross source filtering
-- performance optimization of dashboards
+- keys option added to snhostfilter for easy cross source filtering
+- rename all commands with a sn prefix for better completion
+- performance optimizations of dashboards
 
 ## Version 0.9.2
 
