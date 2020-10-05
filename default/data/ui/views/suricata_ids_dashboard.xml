@@ -11,7 +11,7 @@
     </input>
   </fieldset>
   <search id="alert">
-    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category</query>
+    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
@@ -20,7 +20,7 @@
       <title>Alerts History by Category</title>
       <chart>
         <search base="alert">
-          <query>| timechart count by alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
+          <query>| timechart count by alert.category</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
