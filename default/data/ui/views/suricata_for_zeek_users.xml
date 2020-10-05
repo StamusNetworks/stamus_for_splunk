@@ -10,12 +10,12 @@
     </input>
   </fieldset>
   <search id="http">
-    <query>event_type=http | fields http.hostname http.http_user_agent</query>
+    <query>event_type=http sourcetype="suricata:http" | fields http.hostname http.http_user_agent</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="tls">
-    <query>event_type=tls | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
+    <query>event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
