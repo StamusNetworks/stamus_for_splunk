@@ -1,4 +1,4 @@
-<form>
+<form theme="dark">
   <label>Suricata Events Dashboard</label>
   <description>Dashboard for Suricata EVE logging</description>
   <fieldset submitButton="false" autoRun="true">
