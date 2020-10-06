@@ -1,4 +1,4 @@
-<form>
+<form theme="dark">
   <label>Suricata IDS Dashboard</label>
   <description>Dashboard using data from Suricata alerts</description>
   <fieldset submitButton="false" autoRun="true">
