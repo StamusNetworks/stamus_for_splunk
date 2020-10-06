@@ -1,17 +1,17 @@
 <nav search_view="search" color="#005792">
-<collection label="Scirius Security Platform">
-  <view name="stamus_events_dashboard" />
-  <view name="stamus_networks_ids_dashboard" />
-  <view name="stamus_networks_ip_investigation" />
-  <view name="stamus_networks_for_zeek_users" />
-  <view name="str_dashboard" />
-</collection>
-<collection label="Suricata Sensors">
+<collection label="SELKS Dashboard - Free">
   <view name="stamus_networks_for_admins" />
   <view name="global-dashboard" default='true' />
   <view name="suricata_for_zeek_users" />
   <view name="suricata_ids_dashboard" />
   <view name="ip_investigation_with_suricata" />
+</collection>
+<collection label="Scirius Security Platform - Premium">
+  <view name="stamus_events_dashboard" />
+  <view name="stamus_networks_ids_dashboard" />
+  <view name="stamus_networks_ip_investigation" />
+  <view name="stamus_networks_for_zeek_users" />
+  <view name="str_dashboard" />
 </collection>
   <view name="search" />
   <view name="datasets" />
