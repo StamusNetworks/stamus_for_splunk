@@ -1,0 +1,7 @@
+[data-view*="views/shared/appbar/Master"]{
+background: #005792;
+}
+
+[data-view*="views/shared/appbar/Button"]{
+color: #FFF;
+}
