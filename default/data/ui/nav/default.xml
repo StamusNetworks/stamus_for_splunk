@@ -1,4 +1,4 @@
-<nav search_view="search" color="#005792">
+<nav search_view="search" color="#0297a9">
 <collection label="Suricata Sensors">
   <view name="stamus_networks_for_admins" />
   <view name="global-dashboard" default='true' />
