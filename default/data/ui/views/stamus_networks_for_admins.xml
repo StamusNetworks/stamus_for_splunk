@@ -11,10 +11,48 @@
   </fieldset>
   <row>
     <panel>
+      <title>Sensors Heartbeat</title>
+      <table>
+        <search>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | stats max(timestamp) as last_seen by host | eval iso8601_last_seen=strptime(last_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Last Seen"=tostring(round(now() - iso8601_last_seen, 0), "duration") + " ago" | rename host as Host | table Host, "Last Seen" | sort -"Last Seen"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Suricata Uptime</title>
+      <table>
+        <search>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | eventstats latest(host) by _time, host | dedup host | eval "Suricata Uptime"=tostring('stats.uptime', "duration") | rename host as Host | table Host, "Suricata Uptime" | sort "Suricata Uptime"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
       <title>Last Ruleset Reload</title>
       <table>
         <search>
-          <query>event_type=stats sourcetype="suricata:stats" | spath "stats.detect.engines{0}.last_reload" output="last_reload" | stats latest(last_reload) as rt by host | eval trt = strptime(rt,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Reload Time" = strftime(trt, "%H:%M:%S") | eval Since = tostring(round(now() - trt, 0), "duration") | table host "Reload Time" Since</query>
+          <query>event_type=stats sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.last_reload" output="last_reload" | stats latest(last_reload) as rt by host | eval trt = strptime(rt,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Reload Time" = strftime(trt, "%H:%M:%S") | eval Since = tostring(round(now() - trt, 0), "duration") | table host "Reload Time" Since</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -35,7 +73,7 @@
       <title>Loaded Rules per Probe</title>
       <chart>
         <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath "stats.detect.engines{0}.rules_loaded" output=rules_failed| timechart avg(rules_failed) as "Rules Loaded" by host</query>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.rules_loaded" output=rules_failed| timechart avg(rules_failed) as "Rules Loaded" by host</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -50,7 +88,7 @@
       <title>Failing Rules per Probe</title>
       <chart>
         <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath "stats.detect.engines{0}.rules_failed" output=rules_failed| timechart avg(rules_failed) as "Rules failed" by host</query>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.rules_failed" output=rules_failed| timechart avg(rules_failed) as "Rules failed" by host</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -95,7 +133,7 @@
       <title>Kernel Packets</title>
       <chart>
         <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath "stats.capture.kernel_packets_delta" output=packets| timechart sum(packets) as Packets by host</query>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.capture.kernel_packets_delta" output=packets| timechart sum(packets) as Packets by host</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -140,7 +178,7 @@
       <title>Kernel Drops</title>
       <chart>
         <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath "stats.capture.kernel_drops_delta" output=drops| timechart sum(drops) as Drops by host</query>
+          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.capture.kernel_drops_delta" output=drops| timechart sum(drops) as Drops by host</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
