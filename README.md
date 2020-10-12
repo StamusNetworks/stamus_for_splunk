@@ -153,6 +153,12 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 
 # Release Note
 
+## Version 0.9.5
+
+- Better navigation
+- Update colors
+- Fix admin dashboard for multiple probes
+
 ## Version 0.9.3
 
 - CIM 4.x compatibility
