@@ -1,0 +1,102 @@
+<dashboard>
+  <label>Home</label>
+  <description>Stamus Networks App Landing page</description>
+  <row>
+    <panel>
+      <title>Events per Event Type</title>
+      <chart>
+        <search>
+          <query>event_type!="*stats" | timechart count by event_type</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="height">134</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel id="events_trend">
+      <title>Events Trend</title>
+      <single>
+        <search>
+          <query>event_type=* sourcetype="suricata:*" | spath host | search host=* | timechart count by host</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="height">134</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">0</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel id="stamus_app_information">
+      <title>For Scirius Security Platform Users</title>
+      <html>
+        <ul>
+          <li><a href="stamus_networks_ids_dashboard">Intrusion Detection System Dashboard</a></li>
+          <li><a href="stamus_networks_for_zeek_users">Network Traffic Analysis Dashboard</a></li>
+          <li><a href="str_dashboard">Scirius Threat Radar Dashboard</a></li>
+          <li><a href="stamus_networks_ip_investigation">Investigate an IP</a></li>
+        </ul>
+      </html>
+    </panel>
+    <panel id="suricata_app_information">
+      <title>For Suricata Users</title>
+      <html>
+        <ul>
+          <li><a href="suricata_ids_dashboard">Intrusion Detection System Dashboard</a></li>
+          <li><a href="suricata_for_zeek_users">Network Security Monitoring Dashboard</a></li>
+          <li><a href="ip_investigation_with_suricata">Investigate an IP</a></li>         
+        </ul>
+      </html>
+    </panel>
+  </row>
+</dashboard>
