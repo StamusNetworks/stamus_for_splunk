@@ -167,7 +167,7 @@
   </row>
   <row>
     <panel>
-      <title>HTTP User Agents</title>
+      <title>HTTP User Agents over Time</title>
       <viz type="timeline_app.timeline">
         <search>
           <query>event_type="http" sourcetype="suricata:http" |search src_ip=$src$ | stats min(timestamp) as first_seen, max(timestamp) as last_seen by http.http_user_agent | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start http.http_user_agent duration</query>
@@ -183,7 +183,7 @@
       </viz>
     </panel>
     <panel>
-      <title>TLS JA3</title>
+      <title>TLS JA3 over Time</title>
       <viz type="timeline_app.timeline">
         <search>
           <query>event_type="tls" sourcetype="suricata:tls" |search src_ip=$src$ | stats min(timestamp) as first_seen, max(timestamp) as last_seen by tls.ja3.hash | eval iso8601_start=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | sort -iso8601_end | table iso8601_start tls.ja3.hash duration</query>
