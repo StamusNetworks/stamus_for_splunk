@@ -153,6 +153,10 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 
 # Release Note
 
+## Release 0.9.7
+
+- Add drilldown to dashboards
+
 ## Release 0.9.6
 
 - Splunk 7.x compatibility
