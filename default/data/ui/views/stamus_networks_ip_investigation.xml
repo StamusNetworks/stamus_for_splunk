@@ -306,7 +306,7 @@
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.mode">standard</option>
-        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.placement">none</option>
         <option name="charting.lineWidth">2</option>
         <option name="refresh.display">progressbar</option>
         <option name="trellis.enabled">0</option>
