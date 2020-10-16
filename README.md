@@ -156,6 +156,7 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 ## Release 0.9.7
 
 - Add drilldown to dashboards
+- Minor fixes
 
 ## Release 0.9.6
 
