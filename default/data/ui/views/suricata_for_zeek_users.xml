@@ -283,7 +283,7 @@
       <title>SMB User Logon</title>
       <table>
         <search base="smb">
-          <query>| rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(timestamp) as "Min Timestamp", max(timestamp) as "Max Timestamp", count by Username, Host | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
+          <query>| rename smb.ntlmssp.user as Username | search Username!="" | rename src_ip as Host | stats min(_time) as "Min Timestamp", max(_time) as "Max Timestamp", count by Username, Host | convert ctime("Min Timestamp") | convert ctime("Max Timestamp") | table Username, Host, "Min Timestamp", "Max Timestamp", count</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
