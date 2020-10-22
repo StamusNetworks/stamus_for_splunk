@@ -11,6 +11,26 @@
   </fieldset>
   <row>
     <panel>
+      <title>New Services on Known Hosts</title>
+      <table>
+        <search>
+          <query>| snhostsearch filter="net_info.agg!=internet" | addinfo | spath first_seen  | eval host_first_seen=strptime(first_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval diff_host_start=(tonumber(host_first_seen) - info_min_time) | search diff_host_start &lt; 0 | rename first_seen as "Host First Seen" | spath services_count | search services_count &gt; 1 | spath path=services{} output=service_info | mvexpand service_info | spath ip | spath input=service_info path=values{} output=service_details | mvexpand service_details | spath input=service_details | eval start_seen=strptime(first_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") | eval diff_start=(tonumber(start_seen) - info_min_time) | search diff_start &gt; 0 | eval diff_end=(info_max_time - tonumber(start_seen)) | search diff_end &gt; 0|  spath input=service_info port | spath net_info{0}.agg output=Net| eval Network=if(isnull(Net), "Unknown", Net) | rename first_seen as "Service First Seen" | eval Information=coalesce('http.server', 'tls.cn', 'ssh.server.software_version', "No detail")  | table ip port app_proto Information "Service First Seen" Network "Host First Seen"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>HTTP User Agents Anomaly</title>
       <table>
         <search>
@@ -49,7 +69,7 @@
       </table>
     </panel>
   </row>
-    <row>
+  <row>
     <panel>
       <title>SSH Agents Anomaly</title>
       <table>
