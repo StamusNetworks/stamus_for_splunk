@@ -1,0 +1,72 @@
+<form>
+  <label>Stamus Networks Hosts Anomaly</label>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timestamp" searchWhenChanged="true">
+      <label>Time picker</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>HTTP User Agents Anomaly</title>
+      <table>
+        <search>
+          <query>| snhostsearch filter="http_user_agent=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=http_user_agent{} output=agent_data | mvexpand agent_data | spath input=agent_data | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by agent | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, agent | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table agent, ip, network, first_seen, host_first_seen, agentPrime</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>TLS Agents Anomaly</title>
+      <table>
+        <search>
+          <query>| snhostsearch filter="tls_ja3=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=tls_ja3{} output=agent_data | mvexpand agent_data  | spath input=agent_data | spath input=agent_data path=agent{0} output=agent | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by hash | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, hash | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table hash, agent, ip, network, first_seen, host_first_seen, agentPrime</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+    <row>
+    <panel>
+      <title>SSH Agents Anomaly</title>
+      <table>
+        <search>
+          <query>| snhostsearch filter="ssh_client=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=ssh_client{} output=agent_data | mvexpand agent_data  | spath input=agent_data | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by software_version | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, hash | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table software_version, ip, network, first_seen, host_first_seen, agentPrime</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>
