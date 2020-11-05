@@ -1,0 +1,44 @@
+<form>
+  <label>Suricata Hosts Anomaly</label>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timestamp" searchWhenChanged="true">
+      <label>Time picker</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Unique Alerts Splike</title>
+      <table>
+        <title>Display hosts with a spike in alerts for signatures that have not been seen before on the host.</title>
+        <search>
+          <query>event_type="alert" sourcetype="suricata:alert" | spath alert |
+eval ip=mvappend(src_ip, dest_ip) |
+lookup ip_alert_seen.csv ip, alert.signature_id |
+eval alert_first_seen=if(isnull(first_seen), relative_time(now(), "+1d@d"), strptime(first_seen, "%Y-%m-%dT%H:%M:%S.%6N%z")) |
+addinfo |
+eval diff_alert_start=(tonumber(alert_first_seen) - info_min_time) |
+search diff_alert_start &gt; 0 |
+stats distinct_count(alert.signature_id) as uniq_alerts, min(timestamp) as alerts_first_seen, max(timestamp) as alerts_last_seen by ip | 
+search uniq_alerts &gt;= 4 |
+eval alert_start= strptime(alerts_first_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |
+eval alert_end= strptime(alerts_last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |
+eval duration=tostring(round(alert_end - alert_start, 0), "duration") |
+table ip, uniq_alerts, alerts_first_seen, alerts_last_seen, duration</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>

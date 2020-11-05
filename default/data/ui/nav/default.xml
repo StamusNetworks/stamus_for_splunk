@@ -12,6 +12,7 @@
   <view name="global-dashboard" />
   <view name="suricata_for_zeek_users" />
   <view name="suricata_ids_dashboard" />
+  <view name="suricata_host_anomaly" />
   <view name="ip_investigation_with_suricata" />
 </collection>
 <collection label="Administration">
