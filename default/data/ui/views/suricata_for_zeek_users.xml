@@ -362,4 +362,44 @@
       </chart>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>SMB Servers</title>
+      <table>
+        <search>
+          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.response.native_os, smb.response.native_lm by dest_ip | rename dest_ip as Server | rename smb.response.native_os as "Operating System" | rename smb.response.native_lm as "SMB info" | table Server, "Operating System", "SMB info"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>SMB Clients</title>
+      <table>
+        <search>
+          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.request.native_os, smb.request.native_lm by src_ip | rename src_ip as "SMB Client" | rename smb.request.native_os as "SMB Family" | rename smb.request.native_lm as "SMB Version" | table "SMB Client", "SMB Family", "SMB Version"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
