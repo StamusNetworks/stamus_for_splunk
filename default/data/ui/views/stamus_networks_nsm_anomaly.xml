@@ -135,7 +135,7 @@
     <panel>
       <title>Long ICMP Sessions to Internet</title>
       <table>
-        <title>ICMP or ICMPv6 session with an unusual size to an public IP</title>
+        <title>ICMP or ICMPv6 session with an unusual size to a public IP</title>
         <search>
           <query>sourcetype="suricata:flow" proto="ICMP" OR proto="IPv6-ICMP" flow.bytes_toclient&gt;=5000 OR flow.bytes_toserver&gt;=5000 flow.age&gt;5 "net_info.dest_agg"="internet" | table src_ip,dest_ip,flow.bytes_toclient, flow.bytes_toserver, flow.age</query>
           <earliest>$timestamp.earliest$</earliest>
@@ -146,7 +146,6 @@
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>

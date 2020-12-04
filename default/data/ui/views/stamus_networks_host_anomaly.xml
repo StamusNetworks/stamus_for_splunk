@@ -65,6 +65,7 @@ table ip, uniq_alerts, alerts_first_seen, alerts_last_seen, duration</query>
     <panel>
       <title>HTTP User Agents Anomaly</title>
       <table>
+        <title>New HTTP user agents that are only seen on a rare population of hosts in the internal network</title>
         <search>
           <query>| snhostsearch filter="http_user_agent=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=http_user_agent{} output=agent_data | mvexpand agent_data | spath input=agent_data | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by agent | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, agent | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table agent, ip, network, first_seen, host_first_seen, agentPrime</query>
           <earliest>$timestamp.earliest$</earliest>
@@ -85,6 +86,7 @@ table ip, uniq_alerts, alerts_first_seen, alerts_last_seen, duration</query>
     <panel>
       <title>TLS Agents Anomaly</title>
       <table>
+        <title>New TLS user agents that are only seen on a rare population of hosts in the internal network</title>
         <search>
           <query>| snhostsearch filter="tls_ja3=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=tls_ja3{} output=agent_data | mvexpand agent_data  | spath input=agent_data | spath input=agent_data path=agent{0} output=agent | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by hash | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, hash | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table hash, agent, ip, network, first_seen, host_first_seen, agentPrime</query>
           <earliest>$timestamp.earliest$</earliest>
@@ -105,6 +107,7 @@ table ip, uniq_alerts, alerts_first_seen, alerts_last_seen, duration</query>
     <panel>
       <title>SSH Agents Anomaly</title>
       <table>
+        <title>New SSH user agents that are only seen on a rare population of hosts in the internal network</title>
         <search>
           <query>| snhostsearch filter="ssh_client=*"  | spath | rename first_seen as host_first_seen |  spath net_info{0}.agg output=network | spath path=ssh_client{} output=agent_data | mvexpand agent_data  | spath input=agent_data | eval time_seen=strptime(first_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eventstats count(ip) as agent_count, min(time_seen) as agent_first_seen by software_version | eventstats min(agent_count) AS minHits max(agent_count) AS maxHits | eval agentPrime=(agent_count-minHits)/(maxHits-minHits) | sort agentPrime, hash | addinfo | where  agent_first_seen &gt; info_min_time AND agentPrime &lt;= 0.2  | table software_version, ip, network, first_seen, host_first_seen, agentPrime</query>
           <earliest>$timestamp.earliest$</earliest>
