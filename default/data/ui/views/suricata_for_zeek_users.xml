@@ -1,14 +1,5 @@
 <form>
   <label>Suricata for Zeek Users Dashboard</label>
-  <fieldset submitButton="false" autoRun="true">
-    <input type="time" token="timestamp" searchWhenChanged="true">
-      <label>Time picker</label>
-      <default>
-        <earliest>-24h@h</earliest>
-        <latest>now</latest>
-      </default>
-    </input>
-  </fieldset>
   <search id="http">
     <query>event_type=http sourcetype="suricata:http" | fields http.hostname http.http_user_agent</query>
     <earliest>$timestamp.earliest$</earliest>
@@ -24,6 +15,15 @@
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timestamp" searchWhenChanged="true">
+      <label>Time picker</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <title>Events per Event Type</title>
@@ -149,6 +149,24 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </chart>
+    </panel>
+    <panel>
+      <title>File Magic Seen</title>
+      <table>
+        <search>
+          <query>event_type="fileinfo" | spath | top fileinfo.magic</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
     </panel>
   </row>
   <row>
