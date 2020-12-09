@@ -9,6 +9,14 @@
       </default>
     </input>
   </fieldset>
+  <search id="stats">
+	  <query>event_type="stats" sourcetype="suricata:stats" | spath | spath path="stats.http.memuse" | spath path="stats.tcp.memuse" |  spath path="stats.decoder.ipv4_delta" | spath path="stats.decoder.ipv6_delta"
+  		| spath path="stats.decoder.udp_delta" | spath path="stats.decoder.tcp_delta"
+		| spath path="stats.app_layer.flow.tls_delta" | spath path="stats.app_layer.flow.http_delta" | spath path="stats.app_layer.flow.dns_udp_delta"
+  	  </query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <row>
     <panel>
       <html>
@@ -20,11 +28,8 @@
     <panel>
       <title>Sensors Heartbeat</title>
       <table>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | stats max(timestamp) as last_seen by host | eval iso8601_last_seen=strptime(last_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Last Seen"=tostring(round(now() - iso8601_last_seen, 0), "duration") + " ago" | rename host as Host | table Host, "Last Seen" | sort -"Last Seen"</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| stats max(timestamp) as last_seen by host | eval iso8601_last_seen=strptime(last_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Last Seen"=tostring(round(now() - iso8601_last_seen, 0), "duration") + " ago" | rename host as Host | table Host, "Last Seen" | sort -"Last Seen"</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -39,11 +44,8 @@
     <panel>
       <title>Suricata Uptime</title>
       <table>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | eventstats latest(host) by _time, host | dedup host | eval "Suricata Uptime"=tostring('stats.uptime', "duration") | rename host as Host | table Host, "Suricata Uptime" | sort "Suricata Uptime"</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| eventstats latest(host) by _time, host | dedup host | eval "Suricata Uptime"=tostring('stats.uptime', "duration") | rename host as Host | table Host, "Suricata Uptime" | sort "Suricata Uptime"</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -58,11 +60,8 @@
     <panel>
       <title>Last Ruleset Reload</title>
       <table>
-        <search>
-          <query>event_type=stats sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.last_reload" output="last_reload" | stats latest(last_reload) as rt by host | eval trt = strptime(rt,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Reload Time" = strftime(trt, "%H:%M:%S") | eval Since = tostring(round(now() - trt, 0), "duration") | table host "Reload Time" Since</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| spath "stats.detect.engines{0}.last_reload" output="last_reload" | stats latest(last_reload) as rt by host | eval trt = strptime(rt,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval "Reload Time" = strftime(trt, "%H:%M:%S") | eval Since = tostring(round(now() - trt, 0), "duration") | table host "Reload Time" Since</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -79,11 +78,8 @@
     <panel>
       <title>Loaded Rules per Probe</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.rules_loaded" output=rules_failed| timechart avg(rules_failed) as "Rules Loaded" by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| spath "stats.detect.engines{0}.rules_loaded" output=rules_failed| timechart avg(rules_failed) as "Rules Loaded" by host</query>
         </search>
         <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.chart">line</option>
@@ -94,11 +90,8 @@
     <panel>
       <title>Failing Rules per Probe</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.detect.engines{0}.rules_failed" output=rules_failed| timechart avg(rules_failed) as "Rules failed" by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| spath "stats.detect.engines{0}.rules_failed" output=rules_failed| timechart avg(rules_failed) as "Rules failed" by host</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -146,11 +139,8 @@
     <panel>
       <title>Kernel Packets</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.capture.kernel_packets_delta" output=packets| timechart sum(packets) as Packets by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| spath "stats.capture.kernel_packets_delta" output=packets| timechart sum(packets) as Packets by host</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -191,11 +181,8 @@
     <panel>
       <title>Kernel Drops</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | spath "stats.capture.kernel_drops_delta" output=drops| timechart sum(drops) as Drops by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| spath "stats.capture.kernel_drops_delta" output=drops| timechart sum(drops) as Drops by host</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -243,11 +230,8 @@
     <panel>
       <title>TCP Memory Usage</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | timechart avg(stats.tcp.memuse) as "TCP Memuse" by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| timechart avg(stats.tcp.memuse) as "TCP Memuse" by host</query>
         </search>
         <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.chart">line</option>
@@ -258,11 +242,8 @@
     <panel>
       <title>HTTP Memory Usage</title>
       <chart>
-        <search>
-          <query>event_type="stats" sourcetype="suricata:stats" | spath host | timechart avg(stats.http.memuse) as "HTTP Memuse" by host</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| timechart avg(stats.http.memuse) as "HTTP Memuse" by host</query>
         </search>
         <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.chart">line</option>
@@ -282,11 +263,8 @@
     <panel>
       <title>IPv4/IPv6 Timeline</title>
       <chart>
-        <search>
-          <query>sourcetype="suricata:stats" | timechart sum(stats.decoder.ipv4_delta) as IPv4, sum(stats.decoder.ipv6_delta) as IPv6</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| timechart sum(stats.decoder.ipv4_delta) as IPv4, sum(stats.decoder.ipv6_delta) as IPv6</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -325,11 +303,8 @@
     <panel>
       <title>UDP/TCP Timeline</title>
       <chart>
-        <search>
-          <query>sourcetype="suricata:stats" | timechart sum(stats.decoder.udp_delta) as UDP, sum(stats.decoder.tcp_delta) as TCP</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| timechart sum(stats.decoder.udp_delta) as UDP, sum(stats.decoder.tcp_delta) as TCP</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -368,11 +343,8 @@
     <panel>
       <title>HTTP, TLS, DNS Timeline</title>
       <chart>
-        <search>
-          <query>sourcetype="suricata:stats" | timechart sum(stats.app_layer.flow.tls_delta) as TLS, sum(stats.app_layer.flow.http_delta) as HTTP, , sum(stats.app_layer.flow.dns_udp_delta) as DNS</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="stats">
+          <query>| timechart sum(stats.app_layer.flow.tls_delta) as TLS, sum(stats.app_layer.flow.http_delta) as HTTP, sum(stats.app_layer.flow.dns_udp_delta) as DNS</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
