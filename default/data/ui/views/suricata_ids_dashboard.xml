@@ -1,6 +1,11 @@
 <form>
   <label>Suricata IDS Dashboard</label>
   <description>Dashboard using data from Suricata alerts</description>
+  <search id="alert">
+    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -10,11 +15,6 @@
       </default>
     </input>
   </fieldset>
-  <search id="alert">
-    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
-    <earliest>$timestamp.earliest$</earliest>
-    <latest>$timestamp.latest$</latest>
-  </search>
   <row>
     <panel>
       <title>Alerts History by Category</title>
@@ -42,6 +42,35 @@
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.placement">right</option>
         <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Attack Target</title>
+      <chart>
+        <search base="alert">
+          <query>| spath "alert.metadata.attack_target{}" output="Attack Target" | search "Attack Target"=* | mvexpand "Attack Target" |  top "Attack Target"</query>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Affected Product</title>
+      <chart>
+        <search base="alert">
+          <query>| spath "alert.metadata.affected_product{}" output="Affected Product" | search "Affected Product"=* | mvexpand "Affected Product" |  top "Affected Product"</query>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Malware Family</title>
+      <chart>
+        <search base="alert">
+          <query>| spath "alert.metadata.malware_family{}" output="Malware Family" | search "Malware Family"=* | mvexpand "Malware Family" |  top "Malware Family"</query>
+        </search>
+        <option name="charting.chart">pie</option>
       </chart>
     </panel>
   </row>
@@ -100,9 +129,8 @@
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
+        <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
@@ -118,9 +146,8 @@
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
+        <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
@@ -133,7 +160,7 @@
           <query>|search app_proto="http" | top http.hostname</query>
         </search>
         <option name="charting.chart">pie</option>
-        <option name="charting.drilldown">none</option>
+        <option name="charting.drilldown">all</option>
         <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
@@ -147,9 +174,8 @@
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
+        <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
