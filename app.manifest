@@ -5,7 +5,7 @@
     "id": {
       "group": null, 
       "name": "stamus_for_splunk", 
-      "version": "0.9.10"
+      "version": "0.9.11"
     }, 
     "author": [
       {
