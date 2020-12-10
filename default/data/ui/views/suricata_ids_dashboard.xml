@@ -53,6 +53,9 @@
           <query>| spath "alert.metadata.attack_target{}" output="Attack Target" | search "Attack Target"=* | mvexpand "Attack Target" |  top "Attack Target"</query>
         </search>
         <option name="charting.chart">pie</option>
+        <drilldown>
+          <link target="_blank">search?q=event_type%3Dalert%20sourcetype%3D%22suricata%3Aalert%22%20%7C%20fields%20alert.category%20src_ip%20dest_ip%20alert.signature_id%20alert.signature%20app_proto%20http.http_user_agent%20http.hostname%20tls.sni%20%7C%20%20spath%20%22alert.metadata.attack_target%7B%7D%22%20output%3D%22Attack%20Target%22%20%7C%20search%20%22Attack%20Target%22%3D*%20%7C%20mvexpand%20%22Attack%20Target%22%20%7C%20%20search%20%22Attack%20Target%22%3D$click.value$%20%7C%20spath%20timestamp%20%7C%20stats%20min(timestamp)%2C%20max(timestamp)%20by%20alert.signature%2C%20src_ip%2C%20dest_ip&amp;earliest=$timestamp.earliest$&amp;latest=$timestamp.latest$</link>
+        </drilldown>
       </chart>
     </panel>
     <panel>
@@ -62,6 +65,9 @@
           <query>| spath "alert.metadata.affected_product{}" output="Affected Product" | search "Affected Product"=* | mvexpand "Affected Product" |  top "Affected Product"</query>
         </search>
         <option name="charting.chart">pie</option>
+        <drilldown>
+          <link target="_blank">search?q=event_type%3Dalert%20sourcetype%3D%22suricata%3Aalert%22%20%7C%20fields%20alert.category%20src_ip%20dest_ip%20alert.signature_id%20alert.signature%20app_proto%20http.http_user_agent%20http.hostname%20tls.sni%20%7C%20%20spath%20%22alert.metadata.affected_product%7B%7D%22%20output%3D%22Affected%20Product%22%20%7C%20search%20%22Affected%20Product%22%3D*%20%7C%20mvexpand%20%22Affected%20Product%22%20%7C%20%20search%20%22Affected%20Product%22%3D$click.value$%20%7C%20spath%20timestamp%20%7C%20stats%20min(timestamp)%2C%20max(timestamp)%20by%20%20alert.signature%2C%20src_ip%2C%20dest_ip&amp;earliest=$timestamp.earliest$&amp;latest=$timestamp.latest$</link>
+        </drilldown>
       </chart>
     </panel>
     <panel>
@@ -71,6 +77,9 @@
           <query>| spath "alert.metadata.malware_family{}" output="Malware Family" | search "Malware Family"=* | mvexpand "Malware Family" |  top "Malware Family"</query>
         </search>
         <option name="charting.chart">pie</option>
+        <drilldown>
+          <link target="_blank">search?q=event_type%3Dalert%20sourcetype%3D%22suricata%3Aalert%22%20%7C%20fields%20alert.category%20src_ip%20dest_ip%20alert.signature_id%20alert.signature%20app_proto%20http.http_user_agent%20http.hostname%20tls.sni%20%7C%20%20spath%20%22alert.metadata.malware_family%7B%7D%22%20output%3D%22Malware%20Family%22%20%7C%20search%20%22Malware%20Family%22%3D*%20%7C%20mvexpand%20%22Malware%20Family%22%20%7C%20%20search%20%22Malware%20Family%22%3D$click.value$%20%7C%20spath%20timestamp%20%7C%20stats%20min(timestamp)%2C%20max(timestamp)%20by%20alert.signature%2C%20src_ip%2C%20dest_ip&amp;earliest=$timestamp.earliest$&amp;latest=$timestamp.latest$</link>
+        </drilldown>
       </chart>
     </panel>
   </row>
