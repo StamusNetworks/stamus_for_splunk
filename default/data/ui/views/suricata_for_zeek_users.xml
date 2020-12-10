@@ -15,6 +15,11 @@
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
+  <search id="dns">
+    <query>event_type=dns | fields dns.rrname dns.rrtype</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -67,6 +72,13 @@
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
       </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>HTTP Traffic Analysis</h3>
+      </html>
     </panel>
   </row>
   <row>
@@ -150,6 +162,15 @@
         <option name="trellis.size">medium</option>
       </chart>
     </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>File Transfer Analysis</h3>
+      </html>
+    </panel>
+  </row>
+  <row>
     <panel>
       <title>File Magic Seen</title>
       <table>
@@ -166,7 +187,134 @@
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
+        <drilldown>
+          <link target="_blank">search?q=event_type%3D%22fileinfo%22%20%7C%20spath%20%7C%20search%20fileinfo.magic%3D%22$click.value$%22%20%7C%20stats%20min(timestamp)%2C%20max(timestamp)%20by%20fileinfo.filename%2C%20src_ip%2C%20dest_ip%2C%20app_proto&amp;earliest=-24h@h&amp;latest=now</link>
+        </drilldown>
       </table>
+    </panel>
+    <panel>
+      <title>Executable File Transfer per Protocol</title>
+      <chart>
+        <search>
+          <query>sourcetype="suricata:fileinfo" event_type="fileinfo" | regex fileinfo.magic=".*executable.*" | timechart count by app_proto</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>DNS Traffic Analysis</h3>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top DNS Requests</title>
+      <chart>
+        <search base="dns">
+          <query>| top dns.rrname</query>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>DNS Queries Type Timeline</title>
+      <chart>
+        <search base="dns">
+          <query>| timechart count by dns.rrtype</query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.abbreviation">none</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.abbreviation">none</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.abbreviation">none</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Rare DNS Requests</title>
+      <table>
+        <search base="dns">
+          <query>| search dns.rrname="**.**" | rare dns.rrname | table dns.rrname, count</query>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>TLS Traffic Analysis</h3>
+      </html>
     </panel>
   </row>
   <row>
@@ -238,6 +386,13 @@
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">all</option>
       </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>SMB &amp; Associate Traffic Analysis</h3>
+      </html>
     </panel>
   </row>
   <row>
@@ -316,23 +471,49 @@
   </row>
   <row>
     <panel>
-      <title>HTTP errors with Abnormal Content Length</title>
+      <title>SMB Servers</title>
       <table>
         <search>
-          <query>event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
+          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.response.native_os, smb.response.native_lm by dest_ip | rename dest_ip as Server | rename smb.response.native_os as "Operating System" | rename smb.response.native_lm as "SMB info" | table Server, "Operating System", "SMB info"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
-        <option name="drilldown">cell</option>
+        <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
       </table>
+    </panel>
+    <panel>
+      <title>SMB Clients</title>
+      <table>
+        <search>
+          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.request.native_os, smb.request.native_lm by src_ip | rename src_ip as "SMB Client" | rename smb.request.native_os as "SMB Family" | rename smb.request.native_lm as "SMB Version" | table "SMB Client", "SMB Family", "SMB Version"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>Trends and Potential Anomaly</h3>
+      </html>
     </panel>
   </row>
   <row>
@@ -379,39 +560,18 @@
         <option name="trellis.size">medium</option>
       </chart>
     </panel>
-  </row>
-  <row>
     <panel>
-      <title>SMB Servers</title>
+      <title>HTTP errors with Abnormal Content Length</title>
       <table>
         <search>
-          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.response.native_os, smb.response.native_lm by dest_ip | rename dest_ip as Server | rename smb.response.native_os as "Operating System" | rename smb.response.native_lm as "SMB info" | table Server, "Operating System", "SMB info"</query>
+          <query>event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">false</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
-    </panel>
-    <panel>
-      <title>SMB Clients</title>
-      <table>
-        <search>
-          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.request.native_os, smb.request.native_lm by src_ip | rename src_ip as "SMB Client" | rename smb.request.native_os as "SMB Family" | rename smb.request.native_lm as "SMB Version" | table "SMB Client", "SMB Family", "SMB Version"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="count">20</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
+        <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
