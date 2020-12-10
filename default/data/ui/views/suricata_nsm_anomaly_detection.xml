@@ -55,7 +55,7 @@
       <table>
         <title>Direct HTTP requests using an IPv4 address as host name and without HTTP referrer.</title>
         <search>
-          <query>sourcetype="suricata:http"  NOT http.http_refer=* | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" |  stats min(timestamp) as "First Seen" by src_ip,hostname,http.hostname,http.url,http.http_user_agent</query>
+          <query>sourcetype="suricata:http"  NOT http.http_refer=* | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" |  stats min(timestamp) as "First Seen" by src_ip,http.hostname,http.url,http.http_user_agent</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -63,6 +63,7 @@
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">cell</option>
         <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
