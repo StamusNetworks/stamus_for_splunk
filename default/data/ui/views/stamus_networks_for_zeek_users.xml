@@ -22,7 +22,7 @@
       <title>Events Count by Country</title>
       <map>
         <search>
-          <query>event_type=* | geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
+          <query>`stamus_index` event_type=* | geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -61,7 +61,7 @@
       <title>Top Servers Hostnames in Internal Network</title>
       <chart>
         <search>
-          <query>event_type="*" net_info.dest_agg!="internet" |top 20 hostname_info.host | search count&gt;5</query>
+          <query>`stamus_index` event_type="*" net_info.dest_agg!="internet" |top 20 hostname_info.host | search count&gt;5</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -90,7 +90,7 @@
       <title>Rare Hostnames on Internet</title>
       <table>
         <search>
-          <query>event_type="*" net_info.dest_agg="internet" |rare 8 hostname_info.host | sort count</query>
+          <query>`stamus_index` event_type="*" net_info.dest_agg="internet" |rare 8 hostname_info.host | sort count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -111,7 +111,7 @@
       <title>Rare HTTP User Agents</title>
       <table>
         <search>
-          <query>event_type="http" sourcetype="suricata:http" | rare http.http_user_agent</query>
+          <query>`stamus_index` event_type="http" sourcetype="suricata:http" | rare http.http_user_agent</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -130,7 +130,7 @@
       <title>Top Domains in Events by Unique Clients</title>
       <chart>
         <search>
-          <query>event_type="*" | rename hostname_info.domain as "Domain" | stats dc(src_ip) AS Client by "Domain" | sort -Client limit=5</query>
+          <query>`stamus_index` event_type="*" | rename hostname_info.domain as "Domain" | stats dc(src_ip) AS Client by "Domain" | sort -Client limit=5</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -250,7 +250,7 @@
       <title>Top TLS JA3 Hashes</title>
       <table>
         <search>
-          <query>event_type=tls sourcetype="suricata:tls" | spath tls.ja3.agent{0} output="agent" | eval "JA3 Agent"=coalesce('agent', 'tls.ja3.hash') | top "JA3 Agent"</query>
+          <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | spath tls.ja3.agent{0} output="agent" | eval "JA3 Agent"=coalesce('agent', 'tls.ja3.hash') | top "JA3 Agent"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -269,7 +269,7 @@
       <title>Top Servers and JA3S</title>
       <table>
         <search>
-          <query>event_type=tls sourcetype="suricata:tls" | rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
+          <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>

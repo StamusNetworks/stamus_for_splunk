@@ -11,17 +11,17 @@
     </input>
   </fieldset>
   <search id="alert">
-    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category alert.signature</query>
+    <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | fields alert.category alert.signature</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="http">
-    <query>event_type=http sourcetype="suricata:http" | fields http.http_user_agent http.hostname</query>
+    <query>`stamus_index` event_type=http sourcetype="suricata:http" | fields http.http_user_agent http.hostname</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="tls">
-    <query>event_type=tls sourcetype="suricata:tls" | fields tls.version tls.sni</query>
+    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | fields tls.version tls.sni</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
@@ -139,7 +139,7 @@
       <chart>
         <title>Most seen file types</title>
         <search>
-          <query>event_type=fileinfo sourcetype="suricata:fileinfo" |  spath output=fileshort path=fileinfo.magic | eval fileshort=split(fileshort, ",") | eval fileinfo.short=mvindex(fileshort, 0) | top fileinfo.short</query>
+          <query>`stamus_index` event_type=fileinfo sourcetype="suricata:fileinfo" |  spath output=fileshort path=fileinfo.magic | eval fileshort=split(fileshort, ",") | eval fileinfo.short=mvindex(fileshort, 0) | top fileinfo.short</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -169,7 +169,7 @@
       <chart>
         <title>File Type timeline</title>
         <search>
-          <query>event_type=fileinfo sourcetype="suricata:fileinfo" |  spath output=fileshort path=fileinfo.magic | eval fileshort=split(fileshort, ",") | eval fileinfo.short=mvindex(fileshort, 0) | timechart count by fileinfo.short</query>
+          <query>`stamus_index` event_type=fileinfo sourcetype="suricata:fileinfo" |  spath output=fileshort path=fileinfo.magic | eval fileshort=split(fileshort, ",") | eval fileinfo.short=mvindex(fileshort, 0) | timechart count by fileinfo.short</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -200,7 +200,7 @@
       <chart>
         <title>DNS query type</title>
         <search>
-          <query>event_type=dns sourcetype="suricata:dns" | top dns.rrtype</query>
+          <query>`stamus_index` event_type=dns sourcetype="suricata:dns" | top dns.rrtype</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -228,7 +228,7 @@
       <chart>
         <title>SSH client version</title>
         <search>
-          <query>event_type=ssh sourcetype="suricata:ssh" | top ssh.client.software_version</query>
+          <query>`stamus_index` event_type=ssh sourcetype="suricata:ssh" | top ssh.client.software_version</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -311,7 +311,7 @@
       <chart>
         <title>Dest IP with self signed certificates</title>
         <search>
-          <query>event_type=tls sourcetype="suricata:tls" | spath output=subject path=tls.subject | spath output=issuer path=tls.issuerdn | eval "tls.selfsigned"=if(subject==issuer, "true", "false") | search "tls.selfsigned"="true" | timechart count by dest_ip</query>
+          <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | spath output=subject path=tls.subject | spath output=issuer path=tls.issuerdn | eval "tls.selfsigned"=if(subject==issuer, "true", "false") | search "tls.selfsigned"="true" | timechart count by dest_ip</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>

@@ -22,7 +22,7 @@
       <title>Distribution by Kill Chain Phase</title>
       <chart>
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | stats dc(stamus.asset) count by stamus.kill_chain</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | stats dc(stamus.asset) count by stamus.kill_chain</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -36,7 +36,7 @@
       <title>Timeline of Stamus Events on Assets</title>
       <chart>
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | timechart dc(stamus.asset) by threat_name</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | timechart dc(stamus.asset) by threat_name</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -79,7 +79,7 @@
       <title>Assets with Threat(s) by Network</title>
       <chart>
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as Assets by Network</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | stats dc(stamus.asset) as Assets by Network</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -124,7 +124,7 @@
       <title>Assets Timeline</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup snhostlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, threat_name | lookup snhostlookup ip as stamus.asset | table _time, hostname, threat_name, duration</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -149,7 +149,7 @@
       <title>Threat Families</title>
       <chart>
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -192,7 +192,7 @@
       <title>Number of Assets per Threat</title>
       <chart>
         <search>
-          <query>event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | stats dc(stamus.asset) as asset_count by threat_name | table threat_name, asset_count</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | snthreatfilter | stats dc(stamus.asset) as asset_count by threat_name | table threat_name, asset_count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

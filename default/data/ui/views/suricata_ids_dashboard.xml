@@ -2,7 +2,7 @@
   <label>Suricata IDS Dashboard</label>
   <description>Dashboard using data from Suricata alerts</description>
   <search id="alert">
-    <query>event_type=alert sourcetype="suricata:alert" | fields alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
+    <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | fields alert.category src_ip dest_ip alert.signature_id alert.signature app_proto http.http_user_agent http.hostname tls.sni</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>

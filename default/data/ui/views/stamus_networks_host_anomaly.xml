@@ -35,7 +35,7 @@
       <table>
         <title>Display hosts with a spike in alerts for signatures that have not been seen before on the host.</title>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" | spath alert |
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" | spath alert |
 eval ip=mvappend(src_ip, dest_ip) |
 lookup ip_alert_seen.csv ip, alert.signature_id |
 eval alert_first_seen=if(isnull(first_seen), relative_time(now(), "+1d@d"), strptime(first_seen, "%Y-%m-%dT%H:%M:%S.%6N%z")) |

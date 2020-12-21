@@ -21,7 +21,7 @@
       <title>Internal TCP scanning activity</title>
       <table>
         <search>
-          <query>sourcetype="suricata:flow" tcp.state="syn_sent" NOT net_info.dest_agg=internet | stats dc(dest_ip) as "Scan Targets", min(timestamp) as "Start", max(timestamp) as "End" by src_ip | search "Scan Targets" &gt; 10</query>
+          <query>`stamus_index` sourcetype="suricata:flow" tcp.state="syn_sent" NOT net_info.dest_agg=internet | stats dc(dest_ip) as "Scan Targets", min(timestamp) as "Start", max(timestamp) as "End" by src_ip | search "Scan Targets" &gt; 10</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -50,7 +50,7 @@
       <table>
         <title>Direct HTTP requests using an IPv4 address as host name and without HTTP referrer.</title>
         <search>
-          <query>sourcetype="suricata:http"  NOT http.http_refer=* | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | lookup snhostlookup ip as src_ip | stats min(timestamp) as "First Seen" by src_ip,hostname,http.hostname,http.url,http.http_user_agent</query>
+          <query>`stamus_index` sourcetype="suricata:http"  NOT http.http_refer=* | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | lookup snhostlookup ip as src_ip | stats min(timestamp) as "First Seen" by src_ip,hostname,http.hostname,http.url,http.http_user_agent</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -70,7 +70,7 @@
       <table>
         <title>Download of an executable file from Internet with a spoofed extension</title>
         <search>
-          <query>sourcetype="suricata:fileinfo"  "net_info.src_agg"=internet | regex "fileinfo.magic"=".*executable.*" | regex "fileinfo.filename"!=".*(exe|com|dll|cab)" | stats min(timestamp), max(timestamp) by dest_ip, fileinfo.magic, fileinfo.filename, fileinfo.sha256, src_ip</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo"  "net_info.src_agg"=internet | regex "fileinfo.magic"=".*executable.*" | regex "fileinfo.filename"!=".*(exe|com|dll|cab)" | stats min(timestamp), max(timestamp) by dest_ip, fileinfo.magic, fileinfo.filename, fileinfo.sha256, src_ip</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -91,7 +91,7 @@
       <table>
         <title>Download of a executable file from Internet via HTTP using an IPv4 address as hostname</title>
         <search>
-          <query>sourcetype="suricata:fileinfo" | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, http.hostname, fileinfo.filename, fileinfo.sha256</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo" | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, http.hostname, fileinfo.filename, fileinfo.sha256</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -119,7 +119,7 @@
       <table>
         <title>DNS TXT queries with a unusual data size</title>
         <search>
-          <query>sourcetype="suricata:dns" dns.rrtype="TXT" | eval DNSLength=len('dns.rrname') |  search DNSLength &gt; 100 | stats min(timestamp) as "First Seen", max(timestamp) as "Last Seen" by src_ip, dns.rrname</query>
+          <query>`stamus_index` sourcetype="suricata:dns" dns.rrtype="TXT" | eval DNSLength=len('dns.rrname') |  search DNSLength &gt; 100 | stats min(timestamp) as "First Seen", max(timestamp) as "Last Seen" by src_ip, dns.rrname</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -137,7 +137,7 @@
       <table>
         <title>ICMP or ICMPv6 session with an unusual size to a public IP</title>
         <search>
-          <query>sourcetype="suricata:flow" proto="ICMP" OR proto="IPv6-ICMP" flow.bytes_toclient&gt;=5000 OR flow.bytes_toserver&gt;=5000 flow.age&gt;5 "net_info.dest_agg"="internet" | table src_ip,dest_ip,flow.bytes_toclient, flow.bytes_toserver, flow.age</query>
+          <query>`stamus_index` sourcetype="suricata:flow" proto="ICMP" OR proto="IPv6-ICMP" flow.bytes_toclient&gt;=5000 OR flow.bytes_toserver&gt;=5000 flow.age&gt;5 "net_info.dest_agg"="internet" | table src_ip,dest_ip,flow.bytes_toclient, flow.bytes_toserver, flow.age</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

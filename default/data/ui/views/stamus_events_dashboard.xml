@@ -11,12 +11,12 @@
     </input>
   </fieldset>
   <search id="stamus">
-    <query>event_type="stamus" sourcetype="suricata:stamus" | fields stamus.asset stamus.kill_chain stamus.threat_id stamus.asset_net_info</query>
+    <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | fields stamus.asset stamus.kill_chain stamus.threat_id stamus.asset_net_info</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="alert">
-    <query>event_type=alert sourcetype="suricata:alert" | fields "hostname_info.host" "geoip.location.lat" "geoip.location.lon" hostname_info.domain alert.signature_id alert.signature sig.created tls.subject alert.category</query>
+    <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | fields "hostname_info.host" "geoip.location.lat" "geoip.location.lon" hostname_info.domain alert.signature_id alert.signature sig.created tls.subject alert.category</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>

@@ -1,22 +1,22 @@
 <form>
   <label>Suricata for Zeek Users Dashboard</label>
   <search id="http">
-    <query>event_type=http sourcetype="suricata:http" | fields http.hostname http.http_user_agent</query>
+    <query>`stamus_index` event_type=http sourcetype="suricata:http" | fields http.hostname http.http_user_agent</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="tls">
-    <query>event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
+    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="smb">
-    <query>event_type=smb | fields smb.ntlmssp.user src_ip</query>
+    <query>`stamus_index` event_type=smb | fields smb.ntlmssp.user src_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="dns">
-    <query>event_type=dns | fields dns.rrname dns.rrtype</query>
+    <query>`stamus_index` event_type=dns | fields dns.rrname dns.rrtype</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
@@ -34,7 +34,7 @@
       <title>Events per Event Type</title>
       <chart>
         <search>
-          <query>event_type!="stats" | timechart count by event_type</query>
+          <query>`stamus_index` event_type!="stats" | timechart count by event_type</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -175,7 +175,7 @@
       <title>File Magic Seen</title>
       <table>
         <search>
-          <query>event_type="fileinfo" | spath | top fileinfo.magic</query>
+          <query>`stamus_index` event_type="fileinfo" | spath | top fileinfo.magic</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -196,7 +196,7 @@
       <title>Executable File Transfer per Protocol</title>
       <chart>
         <search>
-          <query>sourcetype="suricata:fileinfo" event_type="fileinfo" | regex fileinfo.magic=".*executable.*" | timechart count by app_proto</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo" event_type="fileinfo" | regex fileinfo.magic=".*executable.*" | timechart count by app_proto</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -411,7 +411,7 @@
       <title>Users in Kerberos events</title>
       <chart>
         <search>
-          <query>event_type=krb5 | rename krb5.cname as Username | top Username</query>
+          <query>`stamus_index` event_type=krb5 | rename krb5.cname as Username | top Username</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -474,7 +474,7 @@
       <title>SMB Servers</title>
       <table>
         <search>
-          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.response.native_os, smb.response.native_lm by dest_ip | rename dest_ip as Server | rename smb.response.native_os as "Operating System" | rename smb.response.native_lm as "SMB info" | table Server, "Operating System", "SMB info"</query>
+          <query>`stamus_index` event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.response.native_os, smb.response.native_lm by dest_ip | rename dest_ip as Server | rename smb.response.native_os as "Operating System" | rename smb.response.native_lm as "SMB info" | table Server, "Operating System", "SMB info"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -493,7 +493,7 @@
       <title>SMB Clients</title>
       <table>
         <search>
-          <query>event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.request.native_os, smb.request.native_lm by src_ip | rename src_ip as "SMB Client" | rename smb.request.native_os as "SMB Family" | rename smb.request.native_lm as "SMB Version" | table "SMB Client", "SMB Family", "SMB Version"</query>
+          <query>`stamus_index` event_type="smb" sourcetype="suricata:smb" | spath "smb.command" | search "smb.command"=SMB1_COMMAND_SESSION_SETUP_ANDX | top smb.request.native_os, smb.request.native_lm by src_ip | rename src_ip as "SMB Client" | rename smb.request.native_os as "SMB Family" | rename smb.request.native_lm as "SMB Version" | table "SMB Client", "SMB Family", "SMB Version"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -521,7 +521,7 @@
       <title>Average Flow Age per Protocol</title>
       <chart>
         <search>
-          <query>event_type=flow app_proto!=NULL| timechart avg(flow.age) by app_proto | fillnull value=0</query>
+          <query>`stamus_index` event_type=flow app_proto!=NULL| timechart avg(flow.age) by app_proto | fillnull value=0</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -564,7 +564,7 @@
       <title>HTTP errors with Abnormal Content Length</title>
       <table>
         <search>
-          <query>event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
+          <query>`stamus_index` event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

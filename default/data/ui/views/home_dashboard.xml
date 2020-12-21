@@ -6,7 +6,7 @@
       <title>Events per Event Type</title>
       <chart>
         <search>
-          <query>event_type!="*stats" | timechart count by event_type</query>
+          <query>`stamus_index` event_type!="*stats" | timechart count by event_type</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -50,7 +50,7 @@
       <title>Events Trend</title>
       <single>
         <search>
-          <query>event_type=* sourcetype="suricata:*" | spath host | search host=* | timechart count by host</query>
+          <query>`stamus_index` event_type=* sourcetype="suricata:*" | spath host | search host=* | timechart count by host</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>

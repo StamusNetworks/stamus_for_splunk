@@ -14,7 +14,7 @@
       <title>Alerts Count by Country</title>
       <map>
         <search>
-          <query>event_type=alert sourcetype="suricata:alert" | geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -51,7 +51,7 @@
       <title>Alerts History</title>
       <chart>
         <search>
-          <query>event_type=alert sourcetype="suricata:alert" | eval tag=if(isnull('alert.tag'), "untagged", 'alert.tag') | timechart count by tag</query>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | eval tag=if(isnull('alert.tag'), "untagged", 'alert.tag') | timechart count by tag</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -83,7 +83,7 @@
       <title>Top Networks by Unique Alerts count</title>
       <chart>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" | eval Net=mvappend('net_info.dest_agg', 'net_info.src_agg') | mvexpand Net | eval Network = if('Net' == "", "Unknown", 'Net') | stats dc(alert.signature_id) as "Unique Alerts" by Network | sort -count</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" | eval Net=mvappend('net_info.dest_agg', 'net_info.src_agg') | mvexpand Net | eval Network = if('Net' == "", "Unknown", 'Net') | stats dc(alert.signature_id) as "Unique Alerts" by Network | sort -count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -97,7 +97,7 @@
       <title>Top Host by unique alert count</title>
       <table>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" | eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" | eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -119,7 +119,7 @@
       <title>Top relevant alerts by network</title>
       <table>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" alert.tag="relevant" | top alert.signature by net_info.src_agg | table alert.signature, net_info.src_agg, count</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" alert.tag="relevant" | top alert.signature by net_info.src_agg | table alert.signature, net_info.src_agg, count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -140,7 +140,7 @@
       <title>Alerts Categories</title>
       <chart>
         <search>
-          <query>event_type=alert sourcetype="suricata:alert" | top alert.category</query>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | top alert.category</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -169,7 +169,7 @@
       <title>Alerts on Signatures that are less than 1 month old</title>
       <table>
         <search>
-          <query>event_type=alert sourcetype="suricata:alert" | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -190,7 +190,7 @@
       <title>Top TLS SNI in Alerts</title>
       <chart>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" app_proto="tls" | top tls.sni</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="tls" | top tls.sni</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -204,7 +204,7 @@
       <title>Rare HTTP User Agents in Alerts</title>
       <table>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -223,7 +223,7 @@
       <title>Top HTTP Hostnames in Alerts</title>
       <chart>
         <search>
-          <query>event_type="alert" sourcetype="suricata:alert" app_proto="http" | top http.hostname</query>
+          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="http" | top http.hostname</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

@@ -10,7 +10,7 @@
     </input>
   </fieldset>
   <search id="stats">
-	  <query>event_type="stats" sourcetype="suricata:stats" | spath | spath path="stats.http.memuse" | spath path="stats.tcp.memuse" |  spath path="stats.decoder.ipv4_delta" | spath path="stats.decoder.ipv6_delta"
+	  <query>`stamus_index` event_type="stats" sourcetype="suricata:stats" | spath | spath path="stats.http.memuse" | spath path="stats.tcp.memuse" |  spath path="stats.decoder.ipv4_delta" | spath path="stats.decoder.ipv6_delta"
   		| spath path="stats.decoder.udp_delta" | spath path="stats.decoder.tcp_delta"
 		| spath path="stats.app_layer.flow.tls_delta" | spath path="stats.app_layer.flow.http_delta" | spath path="stats.app_layer.flow.dns_udp_delta"
   	  </query>
