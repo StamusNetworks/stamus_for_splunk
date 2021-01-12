@@ -42,7 +42,7 @@ class StamusThreatFilterCommand(EventingCommand):
             return self.threats_map[id]['name']
 
         snc = StamusRestConnection()
-        resp = snc.get(self.THREAT_URL + str(id))
+        resp = snc.get(self.THREAT_URL + str(id), params={ 'event_view': 'false' })
         self.threats_map[id] = resp
         return resp['name']
 
