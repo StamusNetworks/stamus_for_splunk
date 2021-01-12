@@ -19,6 +19,16 @@ don't have a Scirius Security Platform (SSP).
 
 ##  Configuration
 
+If you are using a custom index to store events, you will need to define which index to use by creating
+a `local/macros.conf` file in the directory of the application. For an index named `mycustomindex`, it
+should look like:
+
+```
+[stamus_index]
+definition = index=mycustomindex
+iseval=0
+```
+
 Scirius Security Platform users need to setup the connectivity with their SSP.
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
