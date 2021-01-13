@@ -34,3 +34,4 @@ Source: [Wikipedia](https://en.wikipedia.org/wiki/Ransomware)"
 
 Trojans are generally spread by some form of social engineering, for example where a user is duped into executing an email attachment disguised to appear not suspicious, (e.g., a routine form to be filled in), or by clicking on some fake advertisement on social media or anywhere else. Although their payload can be anything, many modern forms act as a backdoor, contacting a controller which can then have unauthorized access to the affected computer.[6] Trojans may allow an attacker to access users' personal information such as banking information, passwords, or personal identity. It can also delete a user's files or infect other devices connected to the network. Ransomware attacks are often carried out using a trojan.
 [wikipedia](https://en.wikipedia.org/wiki/Trojan_horse_(computing))"
+15,Offensive Tools,Offensive Tools Family
