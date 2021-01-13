@@ -28,6 +28,7 @@ class StamusRestConnection(object):
         if params is None:
             params = {}
         params['page'] = self.page
+        params['page_size'] = 1000
         resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
         if resp.status_code != 200:
             # This means something went wrong.
