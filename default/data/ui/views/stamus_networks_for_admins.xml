@@ -1,4 +1,4 @@
-<form>
+<form version="1.1">
   <label>Suricata Admin Dashboard</label>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">

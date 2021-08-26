@@ -1,4 +1,4 @@
-<form>
+<form version="1.1">
   <label>Suricata for Zeek Users Dashboard</label>
   <search id="http">
     <query>`stamus_index` event_type=http sourcetype="suricata:http" | fields http.hostname http.http_user_agent</query>
