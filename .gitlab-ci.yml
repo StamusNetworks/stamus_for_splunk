@@ -2,12 +2,12 @@ stages:
   - pkg
 
 build-splunk-app:
-  image: python
+  image: python:3.8
   stage: pkg
   artifacts:
     expire_in: 1 week
     paths:
-    - _build/*.tar.gz 
+    - _build/*.tar.gz
   needs: []
   before_script:
     - pip install splunk-packaging-toolkit
@@ -20,4 +20,4 @@ build-splunk-app:
     - slim package _build/stamus_for_splunk -o _build/
 
 
- 
+
