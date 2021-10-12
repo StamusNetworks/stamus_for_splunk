@@ -1,6 +1,11 @@
 <form>
   <label>Suricata File Information Dashboard</label>
   <description>Suricata file transfer transaction</description>
+  <search id="fileinfo">
+    <query>`stamus_index` event_type=fileinfo sourcetype="suricata:fileinfo"| spath | rex field="fileinfo.magic" "(?&lt;Magic&gt;[^,]+)" | fields app_proto, fileinfo.magic Magic fileinfo.size fileinfo.sha256 fileinfo.filename timestamp dest_ip src_ip</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -14,8 +19,8 @@
     <panel>
       <title>File Transfer per Protocol</title>
       <chart>
-        <search>
-          <query>`stamus_index` sourcetype="suricata:fileinfo" event_type="fileinfo" |  timechart count by app_proto</query>
+        <search base="fileinfo">
+          <query>|  timechart count by app_proto</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -60,8 +65,8 @@
       <title>File Magic Statistics</title>
       <table>
         <title>File Magic</title>
-        <search>
-          <query>`stamus_index` event_type="fileinfo" | spath | rex field="fileinfo.magic" "(?&lt;Magic&gt;[^,]+)"  | stats count(Magic) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by Magic | sort -Count</query>
+        <search base="fileinfo">
+          <query>| stats count(Magic) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by Magic | sort -Count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -72,8 +77,8 @@
     <panel>
       <title>File Magic Timeline</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type="fileinfo" | spath | rex field="fileinfo.magic" "(?&lt;Magic&gt;[^,]+)" | timechart count(Magic) by Magic</query>
+        <search base="fileinfo">
+          <query>| timechart count(Magic) by Magic</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -124,8 +129,8 @@
     <panel>
       <title>Small executable download</title>
       <table>
-        <search>
-          <query>`stamus_index` sourcetype="suricata:fileinfo" | regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, src_ip, app_proto, fileinfo.filename, fileinfo.magic, fileinfo.sha256, fileinfo.size | sort by fileinfo.size asc</query>
+        <search base="fileinfo">
+          <query>| regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, src_ip, app_proto, fileinfo.filename, fileinfo.magic, fileinfo.sha256, fileinfo.size | sort by fileinfo.size asc</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -166,7 +171,7 @@
       <title>Executable file transfer on http using IPv4 host</title>
       <table>
         <search>
-          <query>`stamus_index` sourcetype="suricata:fileinfo" | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, http.hostname, fileinfo.filename, fileinfo.sha256</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo" app_proto="http" | regex "http.hostname"="([0-9]{1,3}\.){3}[0-9]{1,3}" | regex "http.hostname"!="10\..*\..*\..*" | regex "http.hostname"!="192\.168\..*\..*" | regex "http.hostname"!="172\.&lt;16-32&gt;\..*\..*" | regex "fileinfo.magic"=".*executable.*" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, http.hostname, fileinfo.filename, fileinfo.sha256</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
