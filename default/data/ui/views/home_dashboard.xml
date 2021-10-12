@@ -97,7 +97,8 @@
           <li><a href="suricata_ids_dashboard">Intrusion Detection System Dashboard</a></li>
           <li><a href="suricata_for_zeek_users">Network Security Monitoring Dashboard</a></li>
           <li><a href="suricata_nsm_anomaly_detection">Network Security Monitoring Anomaly Detection</a></li>
-          <li><a href="ip_investigation_with_suricata">Investigate an IP</a></li>         
+          <li><a href="suricata_file_information">File Information Dashboard</a></li>
+          <li><a href="ip_investigation_with_suricata">Investigate an IP</a></li>
         </ul>
       </html>
     </panel>

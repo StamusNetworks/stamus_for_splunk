@@ -14,6 +14,7 @@
   <view name="suricata_for_zeek_users" />
   <view name="suricata_ids_dashboard" />
   <view name="suricata_nsm_anomaly_detection" />
+  <view name="suricata_file_information" />
   <view name="ip_investigation_with_suricata" />
 </collection>
 <collection label="Administration">
