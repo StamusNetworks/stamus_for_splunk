@@ -2,7 +2,7 @@
   <label>Suricata File Information Dashboard</label>
   <description>Suricata file transfer transaction</description>
   <search id="fileinfo">
-    <query>`stamus_index` event_type=fileinfo sourcetype="suricata:fileinfo"| spath | rex field="fileinfo.magic" "(?&lt;Magic&gt;[^,]+)" | fields app_proto, fileinfo.magic Magic fileinfo.size fileinfo.sha256 fileinfo.filename timestamp dest_ip src_ip</query>
+      <query>`stamus_index` event_type=fileinfo sourcetype="suricata:fileinfo" | eval magic_split = split(fileinfo.magic, ","), short_magic = mvindex(magic_split, 0) | fields app_proto fileinfo.magic magic_short fileinfo.size fileinfo.sha256 fileinfo.filename timestamp dest_ip src_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
