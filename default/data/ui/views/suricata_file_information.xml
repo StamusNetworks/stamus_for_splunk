@@ -151,7 +151,7 @@
       <title>Executable file transfer by entropy</title>
       <table>
         <search>
-          <query>`stamus_index` sourcetype="suricata:fileinfo" | regex fileinfo.magic = "(?i)executable" | `ut_shannon(fileinfo.filename)` | eval entropy = round(ut_shannon, 2) | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen" by dest_ip, fileinfo.filename, entropy, fileinfo.sha256, app_proto | sort -entropy</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo" | regex fileinfo.magic = "(?i)executable" | `ut_shannon(fileinfo.filename)` | eval entropy = round(ut_shannon, 2) | stats min(timestamp) as first_seen, max(timestamp) as last_seen by dest_ip, fileinfo.filename, entropy, fileinfo.sha256, app_proto | sort -entropy | rename entropy as Entropy, app_proto as Protocol, fileinfo.sha256 as "File SHA256", fileinfo.filename as Filename, dest_ip as "Destination IP", first_seen as "First Seen", last_seen as "Last Seen"</query>
           <earliest>-7d@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
