@@ -66,7 +66,7 @@
       <table>
         <title>File Magic</title>
         <search base="fileinfo">
-          <query>| stats count(short_magic) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by short_magic | sort -Count | rename short_magic as "Magic"</query>
+          <query>| stats count(file_magic_short) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by file_magic_short | sort -Count | rename file_magic_short as "Magic"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -78,7 +78,7 @@
       <title>File Magic Timeline</title>
       <chart>
         <search base="fileinfo">
-          <query>| timechart count by short_magic | rename short_magic as "Magic"</query>
+          <query>| timechart count by file_magic_short | rename file_magic_short as "Magic"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -130,7 +130,7 @@
       <title>Small executable download</title>
       <table>
         <search base="fileinfo">
-          <query>| regex fileinfo.magic = "(?i)executable" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, src_ip, app_proto, fileinfo.filename, fileinfo.magic, fileinfo.sha256, fileinfo.size | sort by -fileinfo.size</query>
+          <query>| regex file_magic = "(?i)executable" | stats min(timestamp) as "First Seen" max(timestamp) as "Last Seen"  by dest_ip, src_ip, app_proto, fileinfo.filename, fileinfo.magic, fileinfo.sha256, fileinfo.size | sort by -fileinfo.size</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
