@@ -66,7 +66,7 @@
       <table>
         <title>File Magic</title>
         <search base="fileinfo">
-          <query>| stats count(Magic) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by Magic | sort -Count</query>
+          <query>| stats count(short_magic) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by short_magic | sort -Count | rename short_magic as "Magic"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
@@ -78,7 +78,7 @@
       <title>File Magic Timeline</title>
       <chart>
         <search base="fileinfo">
-          <query>| timechart count(Magic) by Magic</query>
+          <query>| timechart count by short_magic | rename short_magic as "Magic"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
