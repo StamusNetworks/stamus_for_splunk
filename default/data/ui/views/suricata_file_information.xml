@@ -64,9 +64,9 @@
     <panel>
       <title>File Magic Statistics</title>
       <table>
-        <title>File Magic</title>
+        <title>Distribution of the observed files types</title>
         <search base="fileinfo">
-          <query>| stats count(file_magic_short) as "Count", sum(fileinfo.size) as "Sum", min(fileinfo.size) as "Min Size", max(fileinfo.size) as "Max Size" by file_magic_short | sort -Count | rename file_magic_short as "Magic"</query>
+          <query>| stats count(file_magic_short) as files_count, sum(fileinfo.size) as sum, min(fileinfo.size) as min_size, max(fileinfo.size) as max_size by file_magic_short | sort -files_count | rename file_magic_short as "File Type", sum as "Total Bytes", min_size as "Smallest File (bytes)", max_size as "Largest File (bytes)", files_count as "#. Files"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
