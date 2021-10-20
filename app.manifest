@@ -41,6 +41,9 @@
   "dependencies": {
      "timeline_app": {
         "version": ">=1.5.0"
+     },
+     "utbox": {
+        "version": ">=1.8"
      }
   }, 
   "tasks": null, 
