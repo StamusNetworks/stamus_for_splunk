@@ -130,7 +130,7 @@
       <title>Small executable download</title>
       <table>
         <search base="fileinfo">
-          <query>| regex file_magic = "(?i)executable" | stats min(timestamp) as first_seen,  max(timestamp) as last_seen  by dest_ip, src_ip, app_proto, fileinfo.filename, file_magic, fileinfo.sha256, fileinfo.size | sort by -fileinfo.size | rename first_seen as "First Seen", last_seen as "Last Seen", dest_ip as "Destination IP", src_ip as "Source IP", app_proto as "Protocol", fileinfo.filename as "Filename", file_magic as "File Type (magic)", fileinfo.size as "File size (bytes)", fileinfo.sha256 as "File SHA256"</query>
+          <query>| regex file_magic = "(?i)executable" | stats min(timestamp) as first_seen,  max(timestamp) as last_seen  by dest_ip, src_ip, app_proto, fileinfo.filename, file_magic, fileinfo.sha256, fileinfo.size | sort by fileinfo.size | rename first_seen as "First Seen", last_seen as "Last Seen", dest_ip as "Destination IP", src_ip as "Source IP", app_proto as "Protocol", fileinfo.filename as "Filename", file_magic as "File Type (magic)", fileinfo.size as "File size (bytes)", fileinfo.sha256 as "File SHA256"</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
