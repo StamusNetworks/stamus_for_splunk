@@ -11,7 +11,8 @@ including SELKS users, and Scirius Security Platform users.
 ## Installation
 
 You can use the regular Splunk App installation procedure to install Stamus Networks App for Splunk®.
-You may have to install the [Timeline App](https://splunkbase.splunk.com/app/3120/) to display some of
+You may have to install the [Timeline App](https://splunkbase.splunk.com/app/3120/) and
+[URL Toolbox](https://splunkbase.splunk.com/app/2734) to display some of
 the visualizations.
 
 After installing the application, you can directly use it if you are a Suricata sensors user and
