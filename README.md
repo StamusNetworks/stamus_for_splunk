@@ -143,7 +143,7 @@ event_type="stamus" | lookup snhostlookup ip as stamus.asset | stats min(timesta
 
 #### Concept
 
-The Stamus Threat Radar inside SSP generates events with type `stamus` that are high fidelity events
+The Threat Radar inside Stamus NDR generates events with type `stamus` that are high fidelity events
 generated from signatures or custom algorithms. These events are also mapped to the cyber kill chain to identify the phase of the attack.
 
 #### Thread ID lookup
