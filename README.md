@@ -143,7 +143,7 @@ event_type="stamus" | lookup snhostlookup ip as stamus.asset | stats min(timesta
 
 #### Concept
 
-The Threat Radar inside Stamus NDR generates events with type `stamus` that are high fidelity events
+The Threat detection engine inside Stamus NDR generates events with type `stamus` that are high fidelity events
 generated from signatures or custom algorithms. These events are also mapped to the cyber kill chain to identify the phase of the attack.
 
 #### Thread ID lookup
@@ -163,6 +163,12 @@ event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id 
 
 
 # Release Note
+
+## Release 0.9.17
+
+- Fix form declaration
+- Fix export of macros that was missing
+- Update following renaming of Stamus Networks product
 
 ## Release 0.9.16
 
