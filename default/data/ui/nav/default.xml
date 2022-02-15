@@ -1,6 +1,6 @@
 <nav search_view="search" color="#0297a9">
 <view name="home_dashboard" default='true' />
-<collection label="Scirius Security Platform">
+<collection label="Stamus Security Platform">
   <view name="stamus_events_dashboard" />
   <view name="stamus_networks_ids_dashboard" />
   <view name="stamus_networks_host_anomaly" />

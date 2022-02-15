@@ -1,6 +1,6 @@
 <form version="1.1">
   <label>Stamus Networks NTA Dashboard</label>
-  <description>NSM Dashboard for Scirius Security Platform</description>
+  <description>NSM Dashboard for Stamus Security Platform</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -13,7 +13,7 @@
   <row>
     <panel>
       <html>
-         <h3>Scirius Enriched Hunting</h3>
+         <h3>Stamus Enriched Hunting</h3>
       </html>
     </panel>
   </row>
@@ -173,7 +173,7 @@
   <row>
     <panel>
       <html>
-         <h3>Scirius Threat Radar</h3>
+         <h3>Stamus Threat Radar</h3>
       </html>
     </panel>
   </row>

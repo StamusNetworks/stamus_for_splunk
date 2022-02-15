@@ -1,7 +1,7 @@
 family_id,family_name,family_description
 1,Custom Threats,"This is your user defined threats.
 
-You can use [Scirius Enriched Hunting](/rules/hunt) interface to define them. See [user documentation](/static/doc/str.html#custom-threats) for more information."
+You can use [Stamus Enriched Hunting](/rules/hunt) interface to define them. See [user documentation](/static/doc/str.html#custom-threats) for more information."
 2,APT,"An advanced persistent threat (APT) is a stealthy computer network threat actor, typically a nation state or state-sponsored group, which gains unauthorized access to a computer network and remains undetected for an extended period. In recent times, the term may also refer to non-state sponsored groups conducting large-scale targeted intrusions for specific goals.
 
 Such threat actors' motivations are typically political or economic. To date, every major business sector has recorded instances of attacks by advanced actors with specific goals seeking to steal, spy or disrupt. These include government, defense, financial services, legal services, industrial, telecoms, consumer goods, and many more. Some groups utilize traditional espionage vectors, including social engineering, human intelligence and infiltration to gain access to a physical location to enable network attacks. The purpose of these attacks is to place custom malicious code on one or multiple computers for specific tasks.

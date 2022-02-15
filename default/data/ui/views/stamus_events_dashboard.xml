@@ -1,6 +1,6 @@
 <form version="1.1">
   <label>Stamus Networks Dashboard</label>
-  <description>Generic Dashboard for Scirius Security Platform</description>
+  <description>Generic Dashboard for Stamus Security Platform</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -23,7 +23,7 @@
   <row>
     <panel>
       <html>
-         <h3>Scirius Threat Radar</h3>
+         <h3>Stamus Threat Radar</h3>
       </html>
     </panel>
   </row>
@@ -153,7 +153,7 @@
   <row>
     <panel>
       <html>
-         <h3>Scirius Enriched Hunting</h3>
+         <h3>Stamus Enriched Hunting</h3>
       </html>
     </panel>
   </row>
@@ -281,7 +281,7 @@
   <row>
     <panel>
       <html>
-         <h3>Scirius Probe Management</h3>
+         <h3>Stamus Probe Management</h3>
       </html>
     </panel>
   </row>

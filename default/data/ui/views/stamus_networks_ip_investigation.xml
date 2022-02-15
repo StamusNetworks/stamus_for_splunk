@@ -169,7 +169,7 @@
       </chart>
     </panel>
     <panel>
-      <title>Scirius Threats</title>
+      <title>Declarations of Compromise</title>
       <viz type="timeline_app.timeline">
         <search>
           <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" stamus.asset="$src$" | snthreatfilter | stats min(timestamp) as start_seen, max(timestamp) as last_seen by threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, threat_name | lookup snhostlookup ip as stamus.asset | table _time, threat_name, duration</query>

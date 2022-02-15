@@ -1,6 +1,6 @@
 <form version="1.1">
-  <label>Stamus Networks STR Dashboard</label>
-  <description>Data from Scirius Threat Radar</description>
+  <label>Stamus Networks NDR Dashboard</label>
+  <description>Data from Stamus NDR</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>

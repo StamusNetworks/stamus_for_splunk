@@ -78,12 +78,12 @@
   </row>
   <row>
     <panel id="stamus_app_information">
-      <title>For Scirius Security Platform Users</title>
+      <title>For Stamus Security Platform Users</title>
       <html>
         <ul>
           <li><a href="stamus_networks_ids_dashboard">Intrusion Detection System Dashboard</a></li>
           <li><a href="stamus_networks_for_zeek_users">Network Traffic Analysis Dashboard</a></li>
-          <li><a href="str_dashboard">Scirius Threat Radar Dashboard</a></li>
+          <li><a href="str_dashboard">Stamus Networks NDR Dashboard</a></li>
           <li><a href="stamus_networks_host_anomaly">Stamus Networks Host Anomaly</a></li>
           <li><a href="stamus_networks_nsm_anomaly">Stamus Networks NSM Anomaly</a></li>
           <li><a href="stamus_networks_ip_investigation">Investigate an IP</a></li>
