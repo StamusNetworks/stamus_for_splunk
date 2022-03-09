@@ -86,7 +86,7 @@
       <title>Count of events by type over time</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=* | search src_ip=$src$ OR dest_ip=$src$ | timechart count by event_type</query>
+          <query>`stamus_index` sourcetype="suricata:*" event_type=* | search src_ip=$src$ OR dest_ip=$src$ | timechart count by event_type</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -129,7 +129,7 @@
       <title>Events per type</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=* | search src_ip=$src$ OR dest_ip=$src$ | search NOT event_type IN (flow, alert, stamus) | rename event_type as "Event Type" | top "Event Type"</query>
+          <query>`stamus_index` sourcetype="suricata:*" event_type=* | search src_ip=$src$ OR dest_ip=$src$ | search NOT event_type IN (flow, alert, stamus) | rename event_type as "Event Type" | top "Event Type"</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>

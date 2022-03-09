@@ -11,12 +11,12 @@
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="smb">
-    <query>`stamus_index` event_type=smb | fields smb.ntlmssp.user src_ip</query>
+    <query>`stamus_index` sourcetype="suricata:smb" event_type=smb | fields smb.ntlmssp.user src_ip</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="dns">
-    <query>`stamus_index` event_type=dns | fields dns.rrname dns.rrtype</query>
+    <query>`stamus_index` sourcetype="suricata:dns" event_type=dns | fields dns.rrname dns.rrtype</query>
     <earliest>$timestamp.earliest$</earliest>
     <latest>$timestamp.latest$</latest>
   </search>
@@ -34,7 +34,7 @@
       <title>Events per Event Type</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type!="stats" | timechart count by event_type</query>
+          <query>`stamus_index` sourcetype="suricata:*" event_type!="stats" | timechart count by event_type</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -175,7 +175,7 @@
       <title>File Magic Seen</title>
       <table>
         <search>
-          <query>`stamus_index` event_type="fileinfo" | spath | top fileinfo.magic</query>
+          <query>`stamus_index` sourcetype="suricata:fileinfo" event_type="fileinfo" | spath | top fileinfo.magic</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -411,7 +411,7 @@
       <title>Users in Kerberos events</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=krb5 | rename krb5.cname as Username | top Username</query>
+          <query>`stamus_index` sourcetype="suricata:krb5" event_type=krb5 | rename krb5.cname as Username | top Username</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -521,7 +521,7 @@
       <title>Average Flow Age per Protocol</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=flow app_proto!=NULL| timechart avg(flow.age) by app_proto | fillnull value=0</query>
+          <query>`stamus_index` sourcetype="suricata:flow" event_type=flow app_proto!=NULL| timechart avg(flow.age) by app_proto | fillnull value=0</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -564,7 +564,7 @@
       <title>HTTP errors with Abnormal Content Length</title>
       <table>
         <search>
-          <query>`stamus_index` event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
+          <query>`stamus_index` sourcetype="suricata:http" event_type="http" http.status=4* http.length&gt;10000 | sort -http.length | table src_ip dest_ip http.hostname http.status http.url http.length</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>

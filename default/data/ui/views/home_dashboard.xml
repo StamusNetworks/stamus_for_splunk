@@ -6,7 +6,7 @@
       <title>Events per Event Type</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type!="*stats" | timechart count by event_type</query>
+          <query>`stamus_index` event_type!="*stats" sourcetype="suricata:*" | timechart count by event_type</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>

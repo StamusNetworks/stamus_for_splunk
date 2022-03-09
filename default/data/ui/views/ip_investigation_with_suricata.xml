@@ -18,7 +18,7 @@
       <title>Count of events by type over time</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=* | search src_ip=$src$ OR dest_ip=$src$ | timechart count by event_type</query>
+          <query>`stamus_index` sourcetype="suricata:*" event_type=* | search src_ip=$src$ OR dest_ip=$src$ | timechart count by event_type</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -61,7 +61,7 @@
       <title>Events per type</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type=* | search src_ip=$src$ OR dest_ip=$src$ | search NOT event_type IN (flow, alert, stamus) | rename event_type as "Event Type" | top "Event Type"</query>
+          <query>`stamus_index` sourcetype="suricata:*" event_type=* | search src_ip=$src$ OR dest_ip=$src$ | search NOT event_type IN (flow, alert, stamus) | rename event_type as "Event Type" | top "Event Type"</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -204,7 +204,7 @@
       <title>SMB User Logon on Host</title>
       <table>
         <search>
-          <query>`stamus_index` event_type=smb src_ip=$src$ | rename smb.ntlmssp.user as Username | search Username!="" | rename timestamp as Timestamp | table Username, Timestamp | head 7</query>
+          <query>`stamus_index` sourcetype="suricata:smb" event_type=smb src_ip=$src$ | rename smb.ntlmssp.user as Username | search Username!="" | rename timestamp as Timestamp | table Username, Timestamp | head 7</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -268,7 +268,7 @@
       <title>Rare visited HTTP Hostnames</title>
       <table>
         <search>
-          <query>`stamus_index` event_type="http" | search src_ip=$src$ | rare http.hostname</query>
+          <query>`stamus_index` sourcetype="suricata:http" event_type="http" | search src_ip=$src$ | rare http.hostname</query>
           <earliest>$TimeRange.earliest$</earliest>
           <latest>$TimeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
