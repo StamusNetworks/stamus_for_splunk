@@ -77,6 +77,11 @@ def main():
         try:
             sigid = result[sigfield] # ex: sigid = 2034127
             data = _lookup_ssp_signature(sigid)
+            # Workaround for https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421
+            try:
+                data['signature']['content'] = data['signature']['content'].replace('metadata:', 'sig_params:')
+            except Exception:
+                pass
             result['sig_info'] = json.dumps(data)
         except Exception as e:
             pass
