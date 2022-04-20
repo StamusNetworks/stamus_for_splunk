@@ -161,8 +161,28 @@ You can also lookup the Threat Family information via the `snthreatfamilylookup`
 event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name
 ```
 
+### Signature information
+
+Alert events are not containing the content of the signature that did trigger them and this can be a problem during analysis.
+This Splunk App includes a lookup in Stamus Security Platform (or Scirius CE) that adds the content of the signature to
+the event. Here is a query example:
+
+```
+event_type = "alert"
+| lookup sn_signature_lookup sid as alert.signature_id
+| spath input=sig_info
+| table src_ip, dest_ip, signature.content, signature.imported_date
+```
+
+Note: the `metadata` keyword is substituted in the content with `sig_params` to workaround a [problem in Splunk](https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421).
 
 # Release Note
+
+## Release 0.9.19
+
+- Fix export of application variables
+- Better filtering on data for Splunk with multiple data sources
+- New SSP and Scirius CE lookup to see signature content in Splunk
 
 ## Release 0.9.17
 
