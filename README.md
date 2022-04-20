@@ -20,6 +20,18 @@ don't have a Stamus Security Platform (SSP).
 
 ##  Configuration
 
+When setting up the Splunk log collection (via Splunk forwarder or Spluk itself), you have to set the
+source type to `suricata`. A typical entry in `inputs.conf` will look like:
+
+```
+[monitor:/var/log/suricata/eve.json]
+disabled = false
+index = mycustomindex
+sourcetype = suricata
+```
+
+Note: Stamus Security Platform users have to choose `Suricata` as source type.
+
 If you are using a custom index to store events, you will need to define which index to use by creating
 a `local/macros.conf` file in the directory of the application. For an index named `mycustomindex`, it
 should look like:
