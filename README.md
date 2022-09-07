@@ -5,7 +5,7 @@
 ## Introduction
 
 Stamus Networks App for Splunk® is an application designed for Suricata sensors users,
-including SELKS users, and Stamus Network Detection and Response (Stamus NDR) users.
+including SELKS users, and Stamus Security Platform users.
 
 
 ## Installation
@@ -42,26 +42,26 @@ definition = index=mycustomindex
 iseval=0
 ```
 
-Stamus NDR users need to setup the connectivity with their SSP.
+Stamus Security Platoform users need to setup the connectivity with their Stamus Central Server (SCS).
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
 and setup the following:
 
 ```
 [config]
-api_key = SSP_TOKEN
-base_url = https://SSP_ADDRESS
+api_key = SCS_TOKEN
+base_url = https://SCS_ADDRESS
 check_tls = no
 ```
 
-The `SSP_TOKEN` can be generated from Stamus Security Platform by going to `Account Settings` via the user icon on the top right
+The `SCS_TOKEN` can be generated from Stamus Central Server by going to `Account Settings` via the user icon on the top right
 and selecting `Edit token`. Only read access is necessary so a user with low privilege can be used.
 
 ## Usage
 
 ### Dashboards and Reports
 
-Dashboards and reports containing Suricata in their name are designed for Suricata sensors and do not require a Stamus NDR instance.
+Dashboards and reports containing Suricata in their name are designed for Suricata sensors and do not require a Stamus Security Platform.
 
 The others dashboards require connectivity or data coming from a SSP installation.
 
@@ -69,7 +69,7 @@ The others dashboards require connectivity or data coming from a SSP installatio
 
 #### Concept
 
-Stamus Security Platform features a Host Identification module that builds identity cards of IP addresses seen
+Stamus Security Platform features a module named Host Insights that builds identity cards of IP addresses seen
 in the network without storing all raw events. This provides a concise view of the major attributes that can be linked
 to an IP address.
 
@@ -80,16 +80,18 @@ An host identification entry includes:
 - List of HTTP user agents
 - List of TLS agents (using JA3 technology)
 - List of SSH agents
+- List of application protocol used as agents
+- List of Roles (Domain Controllers, DHCP Servers, Printers, ...)
 
 All this information is associated with a first-seen and last-seen timestamp, so it is possible to know
 precisely when a username or a HTTP user agent was first seen on a given IP address.
 
-#### Host ID search
+#### Host Insights search
 
-The App adds a `snhostsearch` command that queries Stamus Security Platform REST API to fetch Host ID entries
-matching a filter. The following are examples of filters that may be applied to the Host ID module:
+The App adds a `snhostsearch` command that queries Stamus Security Platform REST API to fetch Host Insights entries
+matching a filter. The following are examples of filters that may be applied to the Host Insights module:
 
-To retrieve ALL Host ID entries, simply enter:
+To retrieve ALL Host Insights entries, simply enter:
 
 ```
 | snhostsearch
@@ -119,7 +121,7 @@ To get all requests to nginx server where client IP is running a service on port
 | source="nginx.log" sourcetype="access_combined" | snhostfilter filter="services.port=9997" keys="clientip" | top clientip
 ```
 
-#### Host ID filter
+#### Host Insights filter
 
 The `snhostfilter` commands allow you to select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
 
@@ -129,7 +131,7 @@ The following search returns all alerts for hosts running a service on port 443.
 event_type="alert" | snhostfilter filter="services.port=443"
 ```
 
-#### Host ID lookup
+#### Host Insights lookup
 
 The `snhostlookup` lookup resolves ip to hostname (and reverse) using the hostname information collected by SSP.
 
