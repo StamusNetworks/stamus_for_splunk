@@ -42,7 +42,7 @@ definition = index=mycustomindex
 iseval=0
 ```
 
-Stamus Security Platoform users need to setup the connectivity with their Stamus Central Server (SCS).
+Stamus Security Platform users need to setup the connectivity with their Stamus Central Server (SCS).
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
 and setup the following:
