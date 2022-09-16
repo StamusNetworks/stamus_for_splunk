@@ -22,7 +22,7 @@ class StamusThreatFilterCommand(EventingCommand):
     ##Example
     Display only alerts for IP that run a service on port 443.
     .. code-block::
-        | even_type="stamus"
+        | event_type="stamus"
         | snthreatfilter
         | top stamus.threat_name
     """
