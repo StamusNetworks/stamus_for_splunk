@@ -156,28 +156,6 @@ Display all Stamus Threats events and output a table where asset IP has been res
 event_type="stamus" | lookup snhostlookup ip as stamus.asset | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.threat_id, stamus.asset, stamus.asset_net_info, hostname
 ```
 
-### Using data from Stamus Threat events
-
-#### Concept
-
-The Threat detection engine inside Stamus NDR generates events with type `stamus` that are high fidelity events
-generated from signatures or custom algorithms. These events are also mapped to the cyber kill chain to identify the phase of the attack.
-
-#### Thread ID lookup
-
-
-Get threat by network and use `snthreatfilter` to do `threat_id` resolution:
-
-```
-event_type="stamus" | eval Network = if('stamus.asset_net_info' == "", "Unknown", 'stamus.asset_net_info') | snthreatfilter | stats dc(stamus.asset) as Assets by Network, threat_name
-```
-
-You can also lookup the Threat Family information via the `snthreatfamilylookup`:
-
-```
-event_type="stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name
-```
-
 ### Signature information
 
 Alert events are not containing the content of the signature that did trigger them and this can be a problem during analysis.
@@ -194,6 +172,12 @@ event_type = "alert"
 Note: the `metadata` keyword is substituted in the content with `sig_params` to workaround a [problem in Splunk](https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421).
 
 # Release Note
+
+## Release 1.0.0
+
+- Multi tenant support (Stamus users)
+- Remove snhreatfilter command (Stamus users)
+- TLS cipher suite report
 
 ## Release 0.9.19
 
