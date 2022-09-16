@@ -4,12 +4,19 @@ import csv
 import sys
 
 from lib.stamus.common import StamusRestConnection
+from splunk.clilib import cli_common as cli
 
 
 def hostid_lookup_hostname(hostname):
     snc = StamusRestConnection()
     HOST_URL = '/rest/appliances/host_id/?host_id_qfilter=' + hostname
-    resp = snc.get(HOST_URL)
+    params = {}
+    cfg = cli.getConfStanza('ssp', 'config')
+    tenant = cfg.get('tenant')
+    if tenant:
+        params = {'tenant': int(tenant) }
+
+    resp = snc.get(HOST_URL, params=params)
     data = resp.get('results', [])
     ips = []
     if data is None:
@@ -22,7 +29,13 @@ def hostid_lookup_hostname(hostname):
 def hostid_lookup_ip(ip):
     snc = StamusRestConnection()
     IP_URL = "/rest/appliances/host_id/" + ip
-    resp = snc.get(IP_URL)
+    params = {}
+    cfg = cli.getConfStanza('ssp', 'config')
+    tenant = cfg.get('tenant')
+    if tenant:
+        params = {'tenant': int(tenant) }
+
+    resp = snc.get(IP_URL, params=params)
     data = resp.get('host_id', {}).get('hostname')
     hostnames = []
     if data is None:
