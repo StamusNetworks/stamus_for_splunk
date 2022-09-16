@@ -57,6 +57,9 @@ check_tls = no
 The `SCS_TOKEN` can be generated from Stamus Central Server by going to `Account Settings` via the user icon on the top right
 and selecting `Edit token`. Only read access is necessary so a user with low privilege can be used.
 
+If you have a multi tenant instance of Stamus Security Platform, you need to select a tenant by adding the ``tenant`` stanza
+in the configuration (using the numeric tenant ID).
+
 ## Usage
 
 ### Dashboards and Reports

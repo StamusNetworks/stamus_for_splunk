@@ -42,6 +42,12 @@ class StamusRestConnection(object):
 class StamusHostIdFilters(object):
     FILTER_PREFIX = 'host_id_qfilter'
     def __init__(self, filters):
+        cfg = cli.getConfStanza('ssp', 'config')
+        tenant = cfg.get('tenant')
+        if tenant:
+            self.tenant = int(tenant)
+        else:
+            self.tenant = None
         filters_list = re.split(' +', filters)
         for filt in filters_list:
             for item in FIELDS_SUBSTITUTION:
@@ -69,4 +75,7 @@ class StamusHostIdFilters(object):
 
     def get(self):
         str_filters = ' AND '.join(self.filters)
-        return { self.FILTER_PREFIX: str_filters }
+        result = { self.FILTER_PREFIX: str_filters }
+        if self.tenant:
+            result['tenant'] = self.tenant
+        return result
