@@ -124,7 +124,7 @@
       <title>Assets Timeline</title>
       <viz type="timeline_app.timeline">
         <search>
-          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, stamus.threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, stamus.threat_name | lookup snhostlookup ip as stamus.asset | table _time, hostname, stamus.threat_name, duration</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.asset, stamus.threat_name | eval iso8601_start=strptime(start_seen,"%Y-%m-%dT%H:%M:%S.%6N%z") | eval iso8601_end=strptime(last_seen, "%Y-%m-%dT%H:%M:%S.%6N%z") |  eval duration=1000*(iso8601_end-iso8601_start) | eval _time=start_seen | stats count by _time, duration, stamus.asset, stamus.threat_name | table _time, stamus.asset, stamus.threat_name, duration</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
