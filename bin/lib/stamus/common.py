@@ -64,7 +64,7 @@ class StamusHostIdFilters(object):
                 prefixed_filters.append('host_id.' + filt)
         self.filters = []
         for filt in prefixed_filters:
-            if '=' not in filt:
+            if '=' not in filt and '>' not in filt and '<' not in filt:
                 raise(Exception('Invalid filter: %s' % (filt)))
             if '!' in filt:
                 if filt.index('!') + 1 == filt.index('='):
