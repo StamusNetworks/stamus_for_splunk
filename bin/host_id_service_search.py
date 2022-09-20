@@ -43,7 +43,9 @@ class HostIDSearchServiceCommand(GeneratingCommand):
                 for field in FIELDS_SUBSTITUTION:
                     if host_data.get(field[0]):
                         host_data[field[1]] = host_data.pop(field[0])
-                host_services = host_data.get('services', [])
+                host_services = host_data.get('services')
+                if host_services is None:
+                    continue
                 for service in host_services:
                     for value in service['values']:
                         service_data['service'] = value
