@@ -36,12 +36,14 @@ class HostIDSearchServiceCommand(GeneratingCommand):
                 host_data = host['host_id']
                 service_data = {'ip': host['ip']}
                 service_data['first_seen'] = host_data['first_seen']
-                service_data['last_seen'] = host_data['last_seen']
-                service_data['net_info'] = host_data['net_info']
+                if 'last_seen' in host_data:
+                    service_data['last_seen'] = host_data['last_seen']
+                if 'net_info' in host_data:
+                    service_data['net_info'] = host_data['net_info']
                 for field in FIELDS_SUBSTITUTION:
                     if host_data.get(field[0]):
                         host_data[field[1]] = host_data.pop(field[0])
-                host_services = host_data.get('services')
+                host_services = host_data.get('services', [])
                 for service in host_services:
                     for value in service['values']:
                         service_data['service'] = value
