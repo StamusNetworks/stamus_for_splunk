@@ -156,6 +156,18 @@ Display all Stamus Threats events and output a table where asset IP has been res
 event_type="stamus" | lookup snhostlookup ip as stamus.asset | stats min(timestamp) as start_seen, max(timestamp) as last_seen by stamus.threat_id, stamus.asset, stamus.asset_net_info, hostname
 ```
 
+
+### Host Insights service search
+
+The `snservicesearch` command searches in the Host Insights database and returns the list of services for the hosts
+that match the provided filters.
+
+List all services for host that run HTTP services that are not bound to port 80:
+
+```
+| snservicesearch filter="services.values.app_proto=http services.port!=80" | spath | search service.app_proto="http" service.port!=80
+```
+
 ### Signature information
 
 Alert events are not containing the content of the signature that did trigger them and this can be a problem during analysis.
@@ -177,6 +189,7 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 
 - Multi tenant support (Stamus users)
 - Remove snhreatfilter command (Stamus users)
+- Add snservicesearch command (Stamus users)
 - TLS cipher suite report
 
 ## Release 0.9.19
