@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import requests
 import re
+import shlex
 
 from splunk.clilib import cli_common as cli
 
@@ -50,7 +51,7 @@ class StamusHostIdFilters(object):
             self.tenant = int(tenant)
         else:
             self.tenant = None
-        filters_list = re.split(' +', filters)
+        filters_list = shlex.split(filters)
         for filt in filters_list:
             for item in FIELDS_SUBSTITUTION:
                 if filt.startswith(item[1] + '.') or filt.startswith(item[1] + '='):
