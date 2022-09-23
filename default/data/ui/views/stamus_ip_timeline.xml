@@ -1,0 +1,29 @@
+<form>
+  <label>Stamus Host Timeline</label>
+  <description>Combined timeline of Declarations of Compromise and Host Insights data for a given host</description>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="TimeRange" searchWhenChanged="true">
+      <label>Interval to Search</label>
+      <default>
+        <earliest>-60m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="src" searchWhenChanged="true">
+      <label>IP Address</label>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| snlinearsearch filter="ip=$src$" | spath | append [ search `stamus_index` event_type="stamus" sourcetype="suricata:stamus" stamus.asset="$src$" |rename stamus.asset AS ip stamus.threat_name as type stamus.kill_chain as value | eval event_type="threat" | stats min(timestamp) as timestamp by ip, type, event_type, value] | sort timestamp | table timestamp ip event_type type value</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">100</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
