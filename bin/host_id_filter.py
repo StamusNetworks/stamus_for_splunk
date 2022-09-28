@@ -53,7 +53,7 @@ class HostIdFilterCommand(EventingCommand):
             self.keys = self.keys.split(',')
 
         if self.ips_list is None:
-            snc = StamusRestConnection()
+            snc = StamusRestConnection(metadata=self.metadata)
             # Do search
             filters = StamusHostIdFilters(self.filter).get()
             resp = snc.get(self.HOST_URL, params = filters)

@@ -32,7 +32,7 @@ class HostIDSearchLinearizeCommand(GeneratingCommand):
 
     def generate(self):
         HOST_URL = '/rest/appliances/host_id/'
-        snc = StamusRestConnection()
+        snc = StamusRestConnection(metadata=self.metadata)
         # Do search
         filters = None
         if self.filter:

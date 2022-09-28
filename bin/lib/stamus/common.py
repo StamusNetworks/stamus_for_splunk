@@ -11,7 +11,7 @@ FIELDS_SUBSTITUTION = (['http.user_agent', 'http_user_agent'], ['http.user_agent
 FIELDS_SUBSTITUTION_DICT = {'http.user_agent': 'http_user_agent', 'http.user_agent_count': 'http_user_agent_count', 'tls.ja3': 'tls_ja3', 'tls.ja3_count': 'tls_ja3_count', 'ssh.client': 'ssh_client', 'ssh.client_count': 'ssh_client_count'}
 
 class StamusRestConnection(object):
-    def __init__(self):
+    def __init__(self, metadata=None):
         cfg = cli.getConfStanza('ssp', 'config')
         self.api_key = cfg.get('api_key')
         self.base_url = cfg.get('base_url')
@@ -23,6 +23,15 @@ class StamusRestConnection(object):
         self.headers = { 'Content-Type': 'application/json', 'Authorization': 'Token ' + self.api_key }
         self.next = None
         self.page = 1
+        if metadata is not None:
+            try:
+                self.start_date = int(metadata.searchinfo.earliest_time)
+                self.end_date = int(metadata.searchinfo.latest_time)
+            except:
+                pass
+        else:
+            self.start_date = None
+            self.end_date = None
 
     def get(self, url, params = None):
         if not self.next and self.page != 1:
@@ -32,6 +41,9 @@ class StamusRestConnection(object):
             params = {}
         params['page'] = self.page
         params['page_size'] = 1000
+        if self.start_date:
+            params['start_date'] = self.start_date
+            params['end_date'] = self.end_date
         resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
         if resp.status_code != 200:
             # This means something went wrong.
