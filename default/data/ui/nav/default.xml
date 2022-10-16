@@ -8,6 +8,7 @@
   <view name="stamus_networks_ip_investigation" />
   <view name="stamus_networks_for_zeek_users" />
   <view name="str_dashboard" />
+  <view name="stamus_tls_dashboard" />
 </collection>
 <collection label="Suricata Sensors">
   <view name="global-dashboard" />
@@ -16,6 +17,7 @@
   <view name="suricata_nsm_anomaly_detection" />
   <view name="suricata_file_information" />
   <view name="ip_investigation_with_suricata" />
+  <view name="suricata_tls_dashboard" />
 </collection>
 <collection label="Administration">
   <view name="stamus_networks_for_admins" />

@@ -1,0 +1,40 @@
+<form>
+  <label>Suricata TLS Analysis</label>
+  <description>TLS Dashboard for Suricata</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timestamp" searchWhenChanged="true">
+      <label>Time picker</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Top TLS Cipher Suites</title>
+      <chart>
+        <title>Most common TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Rare TLS Cipher Suites</title>
+      <table>
+        <title>Less common TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
