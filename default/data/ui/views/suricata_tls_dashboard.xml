@@ -12,6 +12,46 @@
   </fieldset>
   <row>
     <panel>
+      <title>Insecure TLS Cipher Suites</title>
+      <table>
+        <title>Insecure TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=insecure  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Degraded TLS Cipher Suites</title>
+      <table>
+        <title>Degraded TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=degraded  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+      </table>
+    </panel>
+    <panel>
+      <title>TLS Cipher Suites Security Level</title>
+      <chart>
+        <title>Repartition of TLS Cipher Suites security</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher_security as "TLS Cipher Security" | top "TLS Cipher Security"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Top TLS Cipher Suites</title>
       <chart>
         <title>Most common TLS Cipher Suites seen in the network</title>

@@ -12,16 +12,57 @@
   </fieldset>
   <row>
     <panel>
+      <title>Insecure TLS Cipher Suites</title>
+      <table>
+        <title>Insecure TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=insecure  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Degraded TLS Cipher Suites</title>
+      <table>
+        <title>Degraded TLS Cipher Suites seen in the network</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=degraded  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+      </table>
+    </panel>
+    <panel>
+      <title>TLS Cipher Suites Security Level</title>
+      <chart>
+        <title>Repartition of TLS Cipher Suites security</title>
+        <search>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher_security as "TLS Cipher Security" | top "TLS Cipher Security"</query>
+          <earliest>$timestamp.earliest$</earliest>
+          <latest>$timestamp.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Top TLS Cipher Suites</title>
       <chart>
         <title>Most common TLS Cipher Suites seen in the network</title>
         <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
     <panel>
@@ -29,11 +70,12 @@
       <table>
         <title>Less common TLS Cipher Suites seen in the network</title>
         <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite"</query>
+          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher_name as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite" | sort count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
@@ -41,9 +83,9 @@
     <panel>
       <title>TLS Certificate Authorities used in local network</title>
       <table>
-        <title>Most common TLS issuer in internal services</title>
+        <title>Most common TLS issuers in internal services</title>
         <search>
-          <query>| snservicesearch filter="services.values.app_proto=tls net_info.agg!=internet" | spath | search service.app_proto="tls" | stats count, min(service.first_seen) as first_seen, max(service.last_seen) as last_seen by service.tls.issuerdn | table service.tls.issuerdn, first_seen, last_seen, count</query>
+          <query>| snservicesearch filter="services.values.app_proto=tls net_info.agg!=internet" | spath | search service.app_proto="tls" | stats count, min(service.first_seen) as first_seen, max(service.last_seen) as last_seen by service.tls.issuerdn | table service.tls.issuerdn, first_seen, last_seen, count | sort -count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
         </search>
