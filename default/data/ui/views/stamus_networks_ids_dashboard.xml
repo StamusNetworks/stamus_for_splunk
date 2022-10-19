@@ -1,5 +1,10 @@
 <form version="1.1">
   <label>Stamus Networks IDS Dashboard</label>
+  <search id="alert">
+    <query>`stamus_index` event_type=alert sourcetype="suricata:alert"| fillnull value="untagged" alert.tag | search  $alert_tag$ | table _time, timestamp, app_proto, geoip.location.lat, geoip.location.lon, alert.tag, alert.category, net_info.src_agg, net_info.dest_agg, alert.signature, alert.signature_id, sig.created, tls.sni, http.http_user_agent, http.hostname, src_ip, dest_ip</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -8,16 +13,23 @@
         <latest>now</latest>
       </default>
     </input>
+    <input type="checkbox" token="alert_tag" searchWhenChanged="true">
+      <label>Alert Tag</label>
+      <valuePrefix>alert.tag="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <choice value="informational">Informational</choice>
+      <choice value="untagged">Untagged</choice>
+      <choice value="relevant">Relevant</choice>
+      <default>informational,untagged,relevant</default>
+    </input>
   </fieldset>
   <row>
     <panel>
       <title>Alerts Count by Country</title>
       <map>
-        <search>
-          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| geostats latfield="geoip.location.lat" longfield="geoip.location.lon" count</query>
         </search>
         <option name="drilldown">all</option>
         <option name="mapping.choroplethLayer.colorBins">5</option>
@@ -50,10 +62,8 @@
     <panel>
       <title>Alerts History</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | eval tag=if(isnull('alert.tag'), "untagged", 'alert.tag') | timechart count by tag</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| timechart count by alert.tag</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -82,11 +92,8 @@
     <panel>
       <title>Top Networks by Unique Alerts count</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" | eval Net=mvappend('net_info.dest_agg', 'net_info.src_agg') | mvexpand Net | eval Network = if('Net' == "", "Unknown", 'Net') | stats dc(alert.signature_id) as "Unique Alerts" by Network | sort -count</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| eval Net=mvappend('net_info.dest_agg', 'net_info.src_agg') | mvexpand Net | eval Network = if('Net' == "", "Unknown", 'Net') | stats dc(alert.signature_id) as "Unique Alerts" by Network | sort -count</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">all</option>
@@ -96,11 +103,8 @@
     <panel>
       <title>Top Host by unique alert count</title>
       <table>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" | eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| eval IP=mvappend('src_ip', 'dest_ip') | mvexpand IP | stats dc(alert.signature_id) as Sigs  by IP | table IP, Sigs | sort -Sigs | head 8</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -118,8 +122,8 @@
     <panel>
       <title>Top relevant alerts by network</title>
       <table>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" alert.tag="relevant" | top alert.signature by net_info.src_agg | table alert.signature, net_info.src_agg, count</query>
+        <search base="alert">
+          <query>| search alert.tag="relevant" | top alert.signature by net_info.src_agg | table alert.signature, net_info.src_agg, count</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -139,10 +143,8 @@
     <panel>
       <title>Alerts Categories</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | top alert.category</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="alert">
+          <query>| top alert.category</query>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -168,11 +170,8 @@
     <panel>
       <title>Alerts on Signatures that are less than 1 month old</title>
       <table>
-        <search>
-          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" | eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| eval diffTime=(now()-strptime('sig.created',"%Y-%m-%d"))/86400 | search diffTime&lt;30 | rename alert.signature as Signature | rename sig.created as Created | stats count by Signature, Created</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -189,11 +188,8 @@
     <panel>
       <title>Top TLS SNI in Alerts</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="tls" | top tls.sni</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>|search app_proto="tls" | top tls.sni</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">all</option>
@@ -203,11 +199,8 @@
     <panel>
       <title>Rare HTTP User Agents in Alerts</title>
       <table>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| search app_proto="http" | rare http.http_user_agent | sort count | head 7</query>
         </search>
         <option name="count">20</option>
         <option name="dataOverlayMode">none</option>
@@ -222,11 +215,8 @@
     <panel>
       <title>Top HTTP Hostnames in Alerts</title>
       <chart>
-        <search>
-          <query>`stamus_index` event_type="alert" sourcetype="suricata:alert" app_proto="http" | top http.hostname</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+        <search base="alert">
+          <query>| search app_proto="http" | top http.hostname</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">all</option>
