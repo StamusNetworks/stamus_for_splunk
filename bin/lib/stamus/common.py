@@ -47,7 +47,7 @@ class StamusRestConnection(object):
         resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
         if resp.status_code != 200:
             # This means something went wrong.
-            raise(Exception('API error'))
+            raise(Exception('API error: response status %d from SCS' % (resp.status_code)))
         data = resp.json()
         self.next = data.get('next')
         self.page +=1
