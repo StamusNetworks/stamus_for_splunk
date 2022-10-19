@@ -1,0 +1,96 @@
+<form>
+  <label>Stamus Policy Violations</label>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="TimeRange" searchWhenChanged="true">
+      <label>Interval to Search</label>
+      <default>
+        <earliest>-24h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Clear Text Passwords</title>
+        <search>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" alert.signature=*cleartext* OR (alert.signature=*password* AND alert.signature=*unencrypted*) | table src_ip, http.hostname, alert.signature  | rex field="alert.signature" mode=sed "s/ET POLICY//" | rename src_ip AS "Target", http.hostname AS "Clear Text Password Server", alert.signature AS "Message" |stats count by Target,Message</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Tor Usage</title>
+        <search>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" alert.signature=*" tor "* |table flow.src_ip, alert.signature  | rex field="alert.signature" mode=sed "s/ET POLICY //" |rex field="alert.signature" mode=sed "s/ET //" | rename flow.src_ip AS "Target", alert.signature AS "Message" |stats count by Target,Message</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Abused Sharing Services</title>
+        <search>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" alert.signature=*file* AND alert.signature=*sharing* AND alert.signature=*site* | table src_ip, http.hostname, dns.query.rrname,tls.sni, alert.signature  | rex field="alert.signature" mode=sed "s/ET POLICY //" |rex field="alert.signature" mode=sed "s/ET //" | rex field="alert.signature" mode=sed "s/ETPRO INFO //" | eval "Abuser"=coalesce('http.hostname', 'dns.query.rrname','tls.sni')  |rename src_ip AS "Target", alert.signature AS "Message" | stats count by Target,Message,Abuser</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>External DNS Resolvers</title>
+        <search>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" app_proto=dns |rename flow.dest_ip as Server | where NOT cidrmatch("10.0.0.0/8", Server) AND NOT cidrmatch("192.168.0.0/16", Server) AND NOT cidrmatch("172.16.0.0/12", Server) | rename dns.query{}.rrname as "DNS Query" | table flow.src_ip,"DNS Query",Server,alert.signature  | rex field="alert.signature" mode=sed "s/ET POLICY //" |rex field="alert.signature" mode=sed "s/ET //" | rex field="alert.signature" mode=sed "s/ETPRO INFO //" |rename flow.src_ip AS Target | stats count by Target,"DNS Query",Server,alert.signature | sort - count</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>External IP Lookups</title>
+        <search>
+          <query>`stamus_index` event_type=alert sourcetype="suricata:alert" app_proto=dns |rename flow.dest_ip as Server | where NOT cidrmatch("10.0.0.0/8", Server) AND NOT cidrmatch("192.168.0.0/16", Server) AND NOT cidrmatch("172.16.0.0/12", Server) |rename dns.query{}.rrname as "DNS Query" | table flow.src_ip,"DNS Query",Server,alert.signature  | rex field="alert.signature" mode=sed "s/ET POLICY //" |rex field="alert.signature" mode=sed "s/ET //" | rex field="alert.signature" mode=sed "s/ETPRO INFO //" |rename flow.src_ip AS Target | stats count by Target,"DNS Query",Server,alert.signature | sort - count</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Insecure TLS Version</title>
+        <search>
+          <query>`stamus_index` event_type=tls sourcetype="suricata:tls" NOT tls.version="TLS 1.3" AND NOT tls.version="TLS 1.2" AND NOT tls.version="UNDETERMINED" | table src_ip, dest_port, dest_ip, tls.version  | rename src_ip AS "Target", dest_ip AS "Offender", tls.version AS "TLS Version" | stats count by Target,Offender,"TLS Version"</query>
+          <earliest>$TimeRange.earliest$</earliest>
+          <latest>$TimeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

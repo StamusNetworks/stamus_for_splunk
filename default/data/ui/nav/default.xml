@@ -9,6 +9,7 @@
   <view name="stamus_networks_for_zeek_users" />
   <view name="str_dashboard" />
   <view name="stamus_tls_dashboard" />
+  <view name="stamus_policy_dashboard" />
 </collection>
 <collection label="Suricata Sensors">
   <view name="global-dashboard" />
