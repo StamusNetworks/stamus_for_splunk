@@ -1,6 +1,16 @@
 <form>
   <label>Suricata TLS Analysis</label>
   <description>TLS Dashboard for Suricata</description>
+  <search id="cipher">
+    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | fields cipher_security, cipher_name</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
+  <search id="tls">
+    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
+    <earliest>$timestamp.earliest$</earliest>
+    <latest>$timestamp.latest$</latest>
+  </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
@@ -12,13 +22,96 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+         <h3>TLS Traffic Analysis</h3>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>TLS Server Name Indication</title>
+      <table>
+        <search base="tls">
+          <query>| top tls.sni</query>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>TLS Version</title>
+      <chart>
+        <search base="tls">
+          <query>| top tls.version</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Top TLS JA3 Hashes</title>
+      <table>
+        <search base="tls">
+          <query>| rename tls.ja3.hash as "JA3 Hash" | top "JA3 Hash"</query>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Servers and JA3S</title>
+      <table>
+        <search base="tls">
+          <query>| rename tls.ja3s.hash as "JA3S Hash" | rename dest_ip as "Server IP" | top "JA3S Hash", "Server IP"</query>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top TLS JA3S Hashes</title>
+      <chart>
+        <search base="tls">
+          <query>| rename tls.ja3s.hash as "JA3S Hash" | top "JA3S Hash"</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+         <h3>TLS Cipher Suite Analysis</h3>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Insecure TLS Cipher Suites</title>
       <table>
         <title>Insecure TLS Cipher Suites seen in the network</title>
-        <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=insecure  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="cipher">
+          <query>| search cipher_security=insecure  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
         </search>
         <option name="drilldown">cell</option>
       </table>
@@ -27,10 +120,8 @@
       <title>Degraded TLS Cipher Suites</title>
       <table>
         <title>Degraded TLS Cipher Suites seen in the network</title>
-        <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | search cipher_security=degraded  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="cipher">
+          <query>| search cipher_security=degraded  | rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
         </search>
         <option name="drilldown">cell</option>
       </table>
@@ -39,10 +130,8 @@
       <title>TLS Cipher Suites Security Level</title>
       <chart>
         <title>Repartition of TLS Cipher Suites security</title>
-        <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher_security as "TLS Cipher Security" | top "TLS Cipher Security"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="cipher">
+          <query>| rename cipher_security as "TLS Cipher Security" | top "TLS Cipher Security"</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">all</option>
@@ -55,25 +144,23 @@
       <title>Top TLS Cipher Suites</title>
       <chart>
         <title>Most common TLS Cipher Suites seen in the network</title>
-        <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="cipher">
+          <query>| rename cipher_name as "TLS Cipher Suite" | top "TLS Cipher Suite"</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
     <panel>
       <title>Rare TLS Cipher Suites</title>
       <table>
         <title>Less common TLS Cipher Suites seen in the network</title>
-        <search>
-          <query>event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | rename cipher as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite"</query>
-          <earliest>$timestamp.earliest$</earliest>
-          <latest>$timestamp.latest$</latest>
+        <search base="cipher">
+          <query>| rename cipher_name as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite" | sort count</query>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
