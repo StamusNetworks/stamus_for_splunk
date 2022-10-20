@@ -190,7 +190,10 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 - Multi tenant support (Stamus users)
 - Remove snhreatfilter command (Stamus users)
 - Add snservicesearch command (Stamus users)
-- TLS cipher suite report
+- New TLS dashboards including TLS cipher suite analysis
+- Add snlinearsearch (Stamus users)
+- Stamus IP timeline using Host Insigths and DoC (Stamus users)
+- Alert tag filtering on Stamus IDS dashboard (Stamus users)
 
 ## Release 0.9.19
 
