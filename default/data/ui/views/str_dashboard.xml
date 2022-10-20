@@ -149,7 +149,7 @@
       <title>Threat Families</title>
       <chart>
         <search>
-          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | lookup snthreatfamilylookup family_id as stamus.family_id | top family_name</query>
+          <query>`stamus_index` event_type="stamus" sourcetype="suricata:stamus" | top stamus.family_name</query>
           <earliest>$timestamp.earliest$</earliest>
           <latest>$timestamp.latest$</latest>
           <sampleRatio>1</sampleRatio>
