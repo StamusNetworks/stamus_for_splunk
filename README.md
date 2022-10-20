@@ -214,6 +214,7 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 - Add snlinearsearch (Stamus users)
 - Stamus IP timeline using Host Insigths and DoC (Stamus users)
 - Alert tag filtering on Stamus IDS dashboard (Stamus users)
+- Stamus Policy Violations dashboard (Stamus users)
 
 ## Release 0.9.19
 
