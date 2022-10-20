@@ -13,7 +13,7 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="checkbox" token="alert_tag" searchWhenChanged="true">
+    <input type="checkbox" token="alert_tag" searchWhenChanged="true" id="alert_tag">
       <label>Alert Tag</label>
       <valuePrefix>alert.tag="</valuePrefix>
       <valueSuffix>"</valueSuffix>
@@ -24,6 +24,19 @@
       <default>informational,untagged,relevant</default>
     </input>
   </fieldset>
+     <row>
+     <html depends="$alwaysHideCSSStyle$">
+       <style>
+        #alert_tag {
+          width: 30em;
+        }
+        #alert_tag .splunk-checkboxgroup div {
+          display: flex;
+          margin-right: 10px;
+        }
+       </style>
+     </html>
+   </row>
   <row>
     <panel>
       <title>Alerts Count by Country</title>
