@@ -124,6 +124,26 @@ To get all requests to nginx server where client IP is running a service on port
 | source="nginx.log" sourcetype="access_combined" | snhostfilter filter="services.port=9997" keys="clientip" | top clientip
 ```
 
+### Host Insights service search
+
+This command is used to search in the services found on the network by Host Insights. For example, to list
+all the services that are TLS and that are not running on port 443, one can do:
+
+
+```
+search = | snservicesearch filter="services.values.app_proto=tls services.port!=443"
+```
+
+### Host Insights linear search
+
+
+This command is used to display all host insights events for a filter. For example to get information
+about discovery time of all metadata on one IP:
+
+```
+| snlinearsearch filter="ip=10.0.0.1" | table timestamp ip event_type type value
+```
+
 #### Host Insights filter
 
 The `snhostfilter` commands allow you to select only events where `src_ip` or `dest_ip` is in the host ID set defined by the filter.
