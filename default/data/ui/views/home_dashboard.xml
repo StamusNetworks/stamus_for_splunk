@@ -86,6 +86,8 @@
           <li><a href="str_dashboard">Stamus Networks NDR Dashboard</a></li>
           <li><a href="stamus_networks_host_anomaly">Stamus Networks Host Anomaly</a></li>
           <li><a href="stamus_networks_nsm_anomaly">Stamus Networks NSM Anomaly</a></li>
+          <li><a href="stamus_tls_dashboard">TLS Analysis Dashboard</a></li>
+          <li><a href="stamus_policy_dashboard">Policy Violation Dashboard</a></li>
           <li><a href="stamus_networks_ip_investigation">Investigate an IP</a></li>
         </ul>
       </html>
@@ -98,6 +100,7 @@
           <li><a href="suricata_for_zeek_users">Network Security Monitoring Dashboard</a></li>
           <li><a href="suricata_nsm_anomaly_detection">Network Security Monitoring Anomaly Detection</a></li>
           <li><a href="suricata_file_information">File Information Dashboard</a></li>
+          <li><a href="suricata_tls_dashboard">TLS Analysis Dashboard</a></li>
           <li><a href="ip_investigation_with_suricata">Investigate an IP</a></li>
         </ul>
       </html>
