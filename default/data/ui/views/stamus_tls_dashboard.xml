@@ -1,5 +1,5 @@
 <form>
-  <label>Stamus TLS Analysis</label>
+  <label>Stamus Networks TLS Analysis</label>
   <description>TLS Dashboard for Stamus Security Platform</description>
   <search id="cipher">
     <query>`stamus_index` event_type=tls | spath tls.ja3s.string output=ja3s_string | eval ja3s_elt=split(ja3s_string,",") | eval cipher_id=mvindex(ja3s_elt, 1) | lookup tls_cipher_mapping.csv id as cipher_id | fields cipher_security, cipher_name</query>

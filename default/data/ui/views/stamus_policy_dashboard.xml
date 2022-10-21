@@ -1,5 +1,5 @@
 <form>
-  <label>Stamus Policy Violations</label>
+  <label>Stamus Networks Policy Violations</label>
   <fieldset submitButton="true" autoRun="false">
     <input type="time" token="TimeRange" searchWhenChanged="true">
       <label>Interval to Search</label>
