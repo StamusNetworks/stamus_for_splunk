@@ -6,6 +6,7 @@
   <view name="stamus_networks_host_anomaly" />
   <view name="stamus_networks_nsm_anomaly" />
   <view name="stamus_networks_ip_investigation" />
+  <view name="stamus_ip_timeline" />
   <view name="stamus_networks_for_zeek_users" />
   <view name="str_dashboard" />
   <view name="stamus_tls_dashboard" />
