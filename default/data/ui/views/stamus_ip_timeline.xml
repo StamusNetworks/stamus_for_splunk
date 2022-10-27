@@ -1,4 +1,4 @@
-<form>
+<form version="1.1">
   <label>Stamus Host Timeline</label>
   <description>Combined timeline of Declarations of Compromise and Host Insights data for a given host</description>
   <fieldset submitButton="true" autoRun="false">
