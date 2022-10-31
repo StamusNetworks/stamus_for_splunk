@@ -157,9 +157,9 @@
       <table>
         <title>Less common TLS Cipher Suites seen in the network</title>
         <search base="cipher">
-          <query>| rename cipher_name as "TLS Cipher Suite" | rare 7 "TLS Cipher Suite" | sort count</query>
+          <query>| rename cipher_name as "TLS Cipher Suite" cipher_security as "Cipher Security" | rare 7 "TLS Cipher Suite", "Cipher Security" | sort count</query>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
