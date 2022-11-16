@@ -44,7 +44,10 @@ class StamusRestConnection(object):
         if self.start_date:
             params['start_date'] = self.start_date
             params['end_date'] = self.end_date
-        resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
+        if direct_url.startswith("https"):
+            resp = requests.get(direct_url, headers=self.headers, verify=self.check_tls, params=params)
+        else:
+            raise(Exception("non HTTPS url are not allowed"))
         if resp.status_code != 200:
             # This means something went wrong.
             raise(Exception('API error: response status %d from SCS' % (resp.status_code)))
