@@ -205,6 +205,12 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 
 # Release Note
 
+## Release 1.0.1
+
+- Only allow https connection to SCS
+- Drill down in TLS dashboard
+- Fix alert event type
+
 ## Release 1.0.0
 
 - Multi tenant support (Stamus users)
