@@ -14,7 +14,7 @@ class StamusRestConnection(object):
     def __init__(self, metadata=None):
         cfg = cli.getConfStanza('ssp', 'config')
         self.api_key = cfg.get('api_key')
-        self.base_url = cfg.get('base_url')
+        self.base_url = cfg.get('base_url').rstrip('/')
         check_tls = cfg.get('check_tls')
         if check_tls.lower() in ['no', 'false']:
             self.check_tls = False
