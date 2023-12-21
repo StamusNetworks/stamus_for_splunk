@@ -7,7 +7,7 @@
     <latest>$timestamp.latest$</latest>
   </search>
   <search id="tls">
-    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja3s.hash dest_ip</query>
+    <query>`stamus_index` event_type=tls sourcetype="suricata:tls" | fields tls.sni tls.version tls.ja3.hash tls.ja4.hash tls.ja3s.hash dest_ip</query>
   </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
