@@ -205,6 +205,12 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 
 # Release Note
 
+## Release 1.0.2
+
+- Improve alert orientation
+- Add JA4 in dashboards
+- Update splunklib
+
 ## Release 1.0.1
 
 - Only allow https connection to SCS
