@@ -205,6 +205,10 @@ Note: the `metadata` keyword is substituted in the content with `sig_params` to 
 
 # Release Note
 
+## Release 1.0.4
+
+- Splunk compatibiliy work
+
 ## Release 1.0.3
 
 - Update splunklib
