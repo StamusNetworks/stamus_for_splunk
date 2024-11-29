@@ -141,7 +141,7 @@ This command is used to display all host insights events for a filter. For examp
 about discovery time of all metadata on one IP:
 
 ```
-| snlinearsearch filter="ip=10.0.0.1" | table timestamp ip event_type type value
+| snlinearsearch filter="ip=192.0.2.146" | table timestamp ip event_type type value
 ```
 
 #### Host Insights filter
