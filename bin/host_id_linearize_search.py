@@ -14,7 +14,7 @@ from lib.stamus.common import StamusRestConnection, StamusHostIdFilters, FIELDS_
 from datetime import datetime, timezone
 
 ARRAY_ITEMS = ['client_service', 'hostname', 'username', 'http.user_agent', 'tls.ja3', 'tls.ja4', 'ssh.client', 'roles']
-ITEM_KEY = {'client_service': 'name', 'hostname': 'host', 'username': 'user', 'http.user_agent': 'agent', 'tls.ja3': 'hash', 'tls.ja4': 'hash', ssh.client': 'software_version', 'roles': 'name', 'services': 'app_proto'}
+ITEM_KEY = {'client_service': 'name', 'hostname': 'host', 'username': 'user', 'http.user_agent': 'agent', 'tls.ja3': 'hash', 'tls.ja4': 'hash', 'ssh.client': 'software_version', 'roles': 'name', 'services': 'app_proto'}
 
 @Configuration(type='events')
 class HostIDSearchLinearizeCommand(GeneratingCommand):
