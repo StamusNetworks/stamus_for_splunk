@@ -32,9 +32,13 @@ sourcetype = suricata
 
 Note: Stamus Security Platform users have to choose `Suricata` as source type.
 
-If you are using a custom index to store events, you will need to define which index to use by creating
-a `local/macros.conf` file in the directory of the application. For an index named `mycustomindex`, it
-should look like:
+If you are using a custom index to store events, you will need to define which index to use.
+To do this in the web application, you can go to `Settings > Advanced search > Search macros`
+then click on `stamus_index`. Then simply edit the value. For example with an index named
+`mycustomindex`, set the `Definition` to `index=mycustomindex`.
+
+You can also do it by creating a `local/macros.conf` file in the directory of the application.
+For an index named `mycustomindex`, it should look like:
 
 ```
 [stamus_index]
