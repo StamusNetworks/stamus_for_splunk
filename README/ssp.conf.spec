@@ -7,3 +7,6 @@ base_url = <value>
 
 check_tls = <value>
 * A boolean (yes|no) to indicate if TLS certificates should be checked when connecting to Stamus Security Platform.
+
+tenant = <value>
+* The tenant name to connect to in Clear NDR. If not set, no tenant will be used.
