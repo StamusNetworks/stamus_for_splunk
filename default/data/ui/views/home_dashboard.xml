@@ -78,7 +78,7 @@
   </row>
   <row>
     <panel id="stamus_app_information">
-      <title>For Stamus Security Platform Users</title>
+      <title>For Clear NDR Enterprise Users</title>
       <html>
         <ul>
           <li><a href="stamus_networks_ids_dashboard">Intrusion Detection System Dashboard</a></li>

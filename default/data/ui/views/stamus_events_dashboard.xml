@@ -1,6 +1,6 @@
 <form version="1.1">
   <label>Stamus Networks Dashboard</label>
-  <description>Generic Dashboard for Stamus Security Platform</description>
+  <description>Generic Dashboard for Clear NDR Enterprise</description>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="timestamp" searchWhenChanged="true">
       <label>Time picker</label>
