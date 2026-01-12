@@ -5,7 +5,7 @@
 ## Introduction
 
 Stamus Networks App for Splunk® is an application designed for Suricata sensors users,
-including SELKS users, and Stamus Security Platform users.
+including Clear NDR users.
 
 
 ## Installation
@@ -16,7 +16,7 @@ You may have to install the [Timeline App](https://splunkbase.splunk.com/app/312
 the visualizations.
 
 After installing the application, you can directly use it if you are a Suricata sensors user and
-don't have a Stamus Security Platform (SSP).
+don't have a Clear NDR Enterprise.
 
 ##  Configuration
 
@@ -30,7 +30,7 @@ index = mycustomindex
 sourcetype = suricata
 ```
 
-Note: Stamus Security Platform users have to choose `Suricata` as source type.
+Note: Clear NDR Enterprise users have to choose `Suricata` as source type.
 
 If you are using a custom index to store events, you will need to define which index to use.
 To do this in the web application, you can go to `Settings > Advanced search > Search macros`
@@ -46,7 +46,9 @@ definition = index=mycustomindex
 iseval=0
 ```
 
-Stamus Security Platform users need to setup the connectivity with their Stamus Central Server (SCS).
+Clear NDR Enterprise users need to setup the connectivity with their Stamus Central Server (SCS).
+
+Clear NDR Community user can do the same with their instances as it provides some additional capabilities.
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
 and setup the following:
@@ -61,22 +63,22 @@ check_tls = no
 The `SCS_TOKEN` can be generated from Stamus Central Server by going to `Account Settings` via the user icon on the top right
 and selecting `Edit token`. Only read access is necessary so a user with low privilege can be used.
 
-If you have a multi tenant instance of Stamus Security Platform, you need to select a tenant by adding the ``tenant`` stanza
+If you have a multi tenant instance of Clear NDR Enterprise, you need to select a tenant by adding the ``tenant`` stanza
 in the configuration (using the numeric tenant ID).
 
 ## Usage
 
 ### Dashboards and Reports
 
-Dashboards and reports containing Suricata in their name are designed for Suricata sensors and do not require a Stamus Security Platform.
+Dashboards and reports containing Suricata in their name are designed for Suricata sensors and do not require a Clear NDR Enterprise.
 
-The others dashboards require connectivity or data coming from a SSP installation.
+The others dashboards require connectivity or data coming from a Clear NDR installation.
 
 ### Using data from Host Identification module of SSP
 
 #### Concept
 
-Stamus Security Platform features a module named Host Insights that builds identity cards of IP addresses seen
+Clear NDR Enterprise features a module named Host Insights that builds identity cards of IP addresses seen
 in the network without storing all raw events. This provides a concise view of the major attributes that can be linked
 to an IP address.
 
@@ -95,7 +97,7 @@ precisely when a username or a HTTP user agent was first seen on a given IP addr
 
 #### Host Insights search
 
-The App adds a `snhostsearch` command that queries Stamus Security Platform REST API to fetch Host Insights entries
+The App adds a `snhostsearch` command that queries Clear NDR Enterprise REST API to fetch Host Insights entries
 matching a filter. The following are examples of filters that may be applied to the Host Insights module:
 
 To retrieve ALL Host Insights entries, simply enter:
@@ -195,7 +197,7 @@ List all services for host that run HTTP services that are not bound to port 80:
 ### Signature information
 
 Alert events are not containing the content of the signature that did trigger them and this can be a problem during analysis.
-This Splunk App includes a lookup in Stamus Security Platform (or Scirius CE) that adds the content of the signature to
+This Splunk App includes a lookup in Clear NDR that adds the content of the signature to
 the event. Here is a query example:
 
 ```
@@ -298,8 +300,8 @@ Initial release.
 
 Features:
 
-- dashboards for Suricata and Stamus Security Platform from Stamus Networks
-- snhostsearch: search host identification entries in Stamus Security Platform 
+- dashboards for Suricata and Clear NDR Enterprise from Stamus Networks
+- snhostsearch: search host identification entries in Clear NDR Enterprise 
 - snhostfilter: filter query on host matching a request done in host identification entries
 - snthreatfilter: resolves Stamus threat id to Stamus threat name
 - snhostlookup: do ip to hostname resolution and reverse using host identification data
