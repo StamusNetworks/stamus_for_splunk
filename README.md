@@ -46,9 +46,10 @@ definition = index=mycustomindex
 iseval=0
 ```
 
-Clear NDR Enterprise users need to setup the connectivity with their Stamus Central Server (SCS).
+Clear NDR Enterprise users need to setup the connectivity with their Stamus Central Server (SCS) to benefit
+from additional features of the application.
 
-Clear NDR Community user can do the same with their instances as it provides some additional capabilities.
+Clear NDR Community user can do the same with their instances as it also provides some additional capabilities.
 
 To do so, you need to create a file `local/ssp.conf` under the application directory (`/opt/splunk/etc/apps/stamus_for_splunk` usually)
 and setup the following:
@@ -301,8 +302,7 @@ Initial release.
 Features:
 
 - dashboards for Suricata and Clear NDR Enterprise from Stamus Networks
-- snhostsearch: search host identification entries in Clear NDR Enterprise 
+- snhostsearch: search host identification entries in Clear NDR Enterprise
 - snhostfilter: filter query on host matching a request done in host identification entries
 - snthreatfilter: resolves Stamus threat id to Stamus threat name
 - snhostlookup: do ip to hostname resolution and reverse using host identification data
-
