@@ -1,43 +1,43 @@
 {
-  "schemaVersion": "2.0.0", 
+  "schemaVersion": "2.0.0",
   "info": {
-    "title": "Stamus Networks App for Splunk", 
+    "title": "Stamus Networks App for Splunk",
     "id": {
-      "group": null, 
-      "name": "stamus_for_splunk", 
-      "version": "1.0.5"
-    }, 
+      "group": null,
+      "name": "stamus_for_splunk",
+      "version": "1.1.0"
+    },
     "author": [
       {
-        "name": "Stamus Networks", 
-        "email": "oss@stamus-networks.com", 
+        "name": "Stamus Networks",
+        "email": "oss@stamus-networks.com",
         "company": "Stamus Networks SAS"
       }
-    ], 
-    "releaseDate": null, 
-    "description": "A Splunk\u00ae application for Suricata and Stamus Networks products.", 
+    ],
+    "releaseDate": null,
+    "description": "A Splunk\u00ae application for Suricata and Stamus Networks products.",
     "classification": {
-      "intendedAudience": "Security Analyst", 
-      "categories": ["security", "suricata logs"], 
+      "intendedAudience": "Security Analyst",
+      "categories": ["security", "suricata logs"],
       "developmentStatus": "Beta"
-    }, 
-    "commonInformationModels": null, 
+    },
+    "commonInformationModels": null,
     "license": {
-      "name": "GNU Affero GPL 3.0", 
-      "text": "./COPYING", 
+      "name": "GNU Affero GPL 3.0",
+      "text": "./COPYING",
       "uri": null
-    }, 
+    },
     "privacyPolicy": {
-      "name": null, 
-      "text": null, 
+      "name": null,
+      "text": null,
       "uri": null
-    }, 
+    },
     "releaseNotes": {
-      "name": null, 
-      "text": "./README.md", 
+      "name": null,
+      "text": "./README.md",
       "uri": null
     }
-  }, 
+  },
   "dependencies": {
      "timeline_app": {
         "version": ">=1.5.0"
@@ -45,15 +45,15 @@
      "utbox": {
         "version": ">=1.8"
      }
-  }, 
-  "tasks": null, 
-  "inputGroups": null, 
-  "incompatibleApps": null, 
-  "platformRequirements": null, 
+  },
+  "tasks": null,
+  "inputGroups": null,
+  "incompatibleApps": null,
+  "platformRequirements": null,
   "supportedDeployments": [
-    "_standalone", 
+    "_standalone",
     "_distributed"
-  ], 
+  ],
   "targetWorkloads": null
 }
 # The following sections can be customized and added to the manifest. For detailed information,
