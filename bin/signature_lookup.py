@@ -79,6 +79,9 @@ def main():
         try:
             sigid = result[sigfield]  # ex: sigid = 2034127
             data = _lookup_ssp_signature(sigid)
+            if "versions" in data["signature"]:
+                sig_data = data["signature"].pop("versions")[-1]
+                data["signature"].update(sig_data)
             # Workaround for https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421
             try:
                 data["signature"]["content"] = data["signature"]["content"].replace(
