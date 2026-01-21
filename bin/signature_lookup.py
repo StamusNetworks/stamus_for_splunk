@@ -43,7 +43,7 @@ sid,sig_info
 """
 
 
-def _lookup_ssp_signature(sid):
+def _lookup_ssp_signature(sid) -> dict:
 
     try:
         snc = StamusRestConnection()
