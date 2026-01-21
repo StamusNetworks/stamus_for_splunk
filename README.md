@@ -205,7 +205,7 @@ the event. Here is a query example:
 event_type = "alert"
 | lookup sn_signature_lookup sid as alert.signature_id
 | spath input=sig_info
-| table src_ip, dest_ip, signature.content, signature.imported_date
+| table src_ip, dest_ip, signature.content, signature.created
 ```
 
 Note: the `metadata` keyword is substituted in the content with `sig_params` to workaround a [problem in Splunk](https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421).
