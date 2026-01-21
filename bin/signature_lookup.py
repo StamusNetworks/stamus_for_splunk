@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Copyright (C) 2023,2026 Stamus Networks SAS.
 import csv
 import sys
 import json
@@ -33,13 +34,14 @@ curl -s -k -X GET https://<SSP_SERVER>/rest/rules/rule/<SIGNATURE_ID>/ -H 'Autho
 
 Command line debug/development:
 
-# cat test.csv 
+# cat test.csv
 sid,sig_info
 
 2035184,
 #
-# /opt/splunk/bin/splunk cmd python signature_lookup.py sid < test.csv 
+# /opt/splunk/bin/splunk cmd python signature_lookup.py sid < test.csv
 """
+
 
 def _lookup_ssp_signature(sid):
 
@@ -47,17 +49,17 @@ def _lookup_ssp_signature(sid):
         snc = StamusRestConnection()
     except Exception as e:
         sys.exit(-1)
-    
+
     try:
-        endpoint_path = "/rest/rules/rule/" + sid + '/'
+        endpoint_path = "/rest/rules/rule/" + sid + "/"
         resp = snc.get(endpoint_path)
     except Exception as e:
         resp = {}
 
     # packaged into a field 'signature' so that we will have a nice 'signature.<something>' field
     # in Splunk after using Splunk's command spath to parse it.
-    return {'signature': resp}
-    
+    return {"signature": resp}
+
 
 def main():
     if len(sys.argv) != 2:
@@ -75,18 +77,20 @@ def main():
 
     for result in r:
         try:
-            sigid = result[sigfield] # ex: sigid = 2034127
+            sigid = result[sigfield]  # ex: sigid = 2034127
             data = _lookup_ssp_signature(sigid)
             # Workaround for https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421
             try:
-                data['signature']['content'] = data['signature']['content'].replace('metadata:', 'sig_params:')
+                data["signature"]["content"] = data["signature"]["content"].replace(
+                    "metadata:", "sig_params:"
+                )
             except Exception:
                 pass
-            result['sig_info'] = json.dumps(data)
+            result["sig_info"] = json.dumps(data)
         except Exception as e:
             pass
-        
+
         w.writerow(result)
 
-main()
 
+main()
