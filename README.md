@@ -67,6 +67,9 @@ and selecting `Edit token`. Only read access is necessary so a user with low pri
 If you have a multi tenant instance of Clear NDR Enterprise, you need to select a tenant by adding the ``tenant`` stanza
 in the configuration (using the numeric tenant ID).
 
+If you want to fetch Newly Registered Domains and get them accessible in a lookup, you
+can add your Stamus license key as value to the `license_key` key.
+
 ## Usage
 
 ### Dashboards and Reports
@@ -210,7 +213,28 @@ event_type = "alert"
 
 Note: the `metadata` keyword is substituted in the content with `sig_params` to workaround a [problem in Splunk](https://community.splunk.com/t5/Developing-for-Splunk-Enterprise/How-to-remove-fields-containing-metadata-keyword-that-get-html/m-p/592421).
 
+### Newly Registered Domains
+
+If a correct Stamus license key has been set in `ssp.conf` then a new lookup is available.
+Here is a simple request checking if the `hostname` field in the (here generated) event is
+present in the list:
+
+```
+| makeresults | eval hostname="sleokise.ink" | lookup nrd-30day.csv value as hostname
+```
+
+The key available in the lookup are:
+- value: the domain name
+- phishing: does the value looks like potential phishing on common services
+- entropy: entropy value
+- date: addition date
+
 # Release Note
+
+## Release 1.1.0
+
+- Newly Registered Domains import as a lookup
+- Misc fixes
 
 ## Release 1.0.4
 
